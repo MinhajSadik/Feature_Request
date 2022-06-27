@@ -16,7 +16,7 @@ connectDB();
 
 //Routes
 const userRoute = require("./routes/userRoute");
-app.use("/users", userRoute);
+app.use("/user", userRoute);
 
 app.get("/", (req, res) => {
   console.log("Hello Feature_Request console viewer");
