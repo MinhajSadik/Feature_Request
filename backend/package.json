@@ -1,8 +1,0 @@
-{
-  "name": "backend",
-  "version": "1.0.0",
-  "main": "server.js",
-  "repository": "https://github.com/MinhajSadik/Feature_Request",
-  "author": "MinhajSadik",
-  "license": "MIT"
-}
