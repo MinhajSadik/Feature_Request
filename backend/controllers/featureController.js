@@ -2,9 +2,13 @@ const Feature = require("../models/featureModel");
 const User = require("../models/userModel");
 
 exports.addNewFeature = async (req, res) => {
+  const { title, description, status, userId } = req.body;
+  userId = req.user._id;
   const newFeature = new Feature({
-    ...req.body,
-    userId: req.user.id,
+    title,
+    description,
+    status,
+    userId,
   });
 
   try {
