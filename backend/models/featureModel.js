@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const featureSchema = new mongoose.Schema(
   {
     userId: {
-      type: [mongoose.Schema.Types.ObjectId],
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
     },
@@ -44,7 +44,7 @@ const featureSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ["under-review", "planned", "in-progress", "complete"],
+      enum: ["under_review", "planned", "in-progress", "complete"],
     },
     createdAt: {
       type: Date,
