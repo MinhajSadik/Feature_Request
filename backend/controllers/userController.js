@@ -58,6 +58,16 @@ exports.loginUser = async (req, res) => {
       process.env.JWT_SECRET,
       {
         expiresIn: "1d",
+      },
+      (err, token) => {
+        if (err) {
+          return res.status(500).json({
+            status: "fail",
+            message: err.message,
+          });
+        }
+        res.json({ token });
+        res.setHeader("token", "token");
       }
     );
 
