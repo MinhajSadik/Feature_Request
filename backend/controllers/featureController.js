@@ -3,7 +3,6 @@ const User = require("../models/userModel");
 
 exports.addNewFeature = async (req, res) => {
   const { title, description, status, userId } = req.body;
-  userId = req.user._id;
   const newFeature = new Feature({
     title,
     description,
@@ -28,12 +27,29 @@ exports.addNewFeature = async (req, res) => {
   }
 };
 
-exports.getAllFeatures = (req, res) => {};
+exports.getAllFeatures = async (req, res) => {
+  try {
+    const features = await Feature.find({})
+      .populate("userId", "-__v -password -email")
+      .populate("comments.user", "-__v -password -email")
+      .sort({ createdAt: -1 });
+    return res.status(200).json({
+      success: true,
+      message: "All features fetched successfully",
+      features,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
-exports.updateVotes = (req, res) => {};
+exports.updateVotes = async (req, res) => {};
 
-exports.updateComment = (req, res) => {};
+exports.updateComment = async (req, res) => {};
 
-exports.searchByFeatureName = (req, res) => {};
+exports.searchByFeatureName = async (req, res) => {};
 
-exports.changeStatus = (req, res) => {};
+exports.changeStatus = async (req, res) => {};

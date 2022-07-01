@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-
-exports.verifyAuthToken = (req, res, next) => {
-  const token = req.headers.token;
+const User = require("../models/userModel");
+exports.verifyAuthToken = async (req, res, next) => {
+  const token = req.cookies.token;
   if (!token) {
     return res.status(401).json({
       name: "TokenMissingError",
@@ -11,8 +11,9 @@ exports.verifyAuthToken = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(process.env.JWT_SECRET);
-    req.user = decoded;
+    const user = await User.findById(decoded._id);
+    req.token = token;
+    req.user = user;
     next();
   } catch (error) {
     return res.status(500).json({
