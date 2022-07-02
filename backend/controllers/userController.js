@@ -39,6 +39,7 @@ exports.registerUser = async (req, res) => {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
       httpOnly: true,
     });
+
     return res.status(201).json({
       success: true,
       message: `User with email ${email} created successfully`,

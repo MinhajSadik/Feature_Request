@@ -1,9 +1,9 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const connectDB = require("./configs/database");
-const cors = require("cors");
-const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const express = require("express");
+const morgan = require("morgan");
+const connectDB = require("./configs/database");
 
 dotenv.config({ path: "./configs/config.env" });
 
@@ -19,8 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 connectDB();
 
 //Routes
-const userRoute = require("./routes/userRoute");
 const featureRoute = require("./routes/featureRoute");
+const userRoute = require("./routes/userRoute");
 app.use("/user", userRoute);
 app.use("/feature", featureRoute);
 
