@@ -17,9 +17,9 @@ router
   .route("/add")
   .post(featureSchemaValidate, verifyAuthToken, addNewFeature);
 router.route("/all").get(getAllFeatures);
-router.route("/votes").put(updateVotes);
+router.route("/vote").put(updateVotes);
 router.route("/comment").put(updateComment);
+router.route("/search/:searchName").get(searchByFeatureName);
 router.route("/update_status").put(verifyAuthToken, changeStatus);
-router.route("/search/:searchValue").get(searchByFeatureName);
 
 module.exports = router;
