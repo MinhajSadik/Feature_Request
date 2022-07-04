@@ -1,7 +1,7 @@
 const Feature = require("../models/featureModel");
+const { isAdmin } = require("../utils/helpers");
 
 exports.addNewFeature = async (req, res) => {
-  const { title, description, userId, status, logo } = req.body;
   try {
     const newFeature = new Feature({
       ...req.body,
@@ -39,7 +39,8 @@ exports.getAllFeatures = async (req, res) => {
     const features = await Feature.find({})
       .populate("userId", "-__v -password -email")
       .populate("comments.user", "-__v -password -email")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .exec();
 
     if (features.length === 0) {
       return res.status(404).json({
@@ -65,7 +66,7 @@ exports.getAllFeatures = async (req, res) => {
 exports.updateVotes = async (req, res) => {
   const { _id, votes } = req.body;
   try {
-    const updatedFeature = await Feature.findByIdAndUpdate(
+    const updatedVotes = await Feature.findByIdAndUpdate(
       {
         _id,
       },
@@ -75,7 +76,7 @@ exports.updateVotes = async (req, res) => {
       }
     );
 
-    if (!updatedFeature) {
+    if (!updatedVotes) {
       return res.status(404).json({
         success: false,
         message: `Feature with id ${_id} does not exist`,
@@ -84,8 +85,8 @@ exports.updateVotes = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: `Feature with id ${_id} updated successfully`,
-      updatedFeature,
+      message: `Vote with id ${_id} updated successfully`,
+      updatedVotes,
     });
   } catch (error) {
     console.error(error.message);
@@ -100,7 +101,7 @@ exports.updateVotes = async (req, res) => {
 exports.updateComment = async (req, res) => {
   const { _id, comments } = req.body;
   try {
-    const updatedFeature = await Feature.findOneAndUpdate(
+    const updatedComment = await Feature.findOneAndUpdate(
       {
         _id,
       },
@@ -110,19 +111,22 @@ exports.updateComment = async (req, res) => {
       {
         new: true,
       }
-    ).populate("comments.user", "-__v -password -email");
+    )
+      .populate("comments.user", "-__v -password -email")
+      .populate("userId", "-__v -password -email")
+      .exec();
 
-    if (!updatedFeature) {
+    if (!updatedComment) {
       return res.status(404).json({
         success: false,
-        message: `Feature with id ${_id} does not exist`,
+        message: `Comment id ${_id} does not exist`,
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: `Feature with id ${_id} updated successfully`,
-      updatedFeature,
+      message: `Comment with id ${_id} updated successfully`,
+      updatedComment,
     });
   } catch (error) {
     console.error(error.message);
@@ -147,7 +151,9 @@ exports.searchByFeatureName = async (req, res) => {
       ],
     })
       .populate("userId", "-__v -password -email")
-      .populate("comments.user", "-__v -password -email");
+      .populate("comments.user", "-__v -password -email")
+      .sort({ createdAt: -1 })
+      .exec();
 
     if (features.length === 0) {
       return res.status(404).json({
@@ -178,4 +184,47 @@ exports.searchByFeatureName = async (req, res) => {
   }
 };
 
-exports.changeStatus = async (req, res) => {};
+exports.changeStatus = async (req, res) => {
+  const { _id, status } = req.body;
+  if (!isAdmin(req)) {
+    return res.status(403).json({
+      success: false,
+      message: `${req.user.name} You're not authorized to perform this action`,
+    });
+  }
+  try {
+    const updatedFeature = await Feature.findOneAndUpdate(
+      {
+        _id,
+      },
+      {
+        status,
+      },
+      {
+        new: true,
+      }
+    )
+      .populate("userId", "-__v -password -email")
+      .populate("comments.user", "-__v -password -email")
+      .exec();
+
+    if (!updatedFeature) {
+      return res.status(404).json({
+        success: false,
+        message: `Feature with id ${_id} does not exist`,
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: `Feature status have ${status} updated successfully`,
+      updatedFeature,
+    });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      name: error.name,
+      success: false,
+      message: error.message,
+    });
+  }
+};

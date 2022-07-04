@@ -1,17 +1,17 @@
-const express = require("express");
-const {
-  addNewFeature,
-  getAllFeatures,
-  changeStatus,
-  updateVotes,
-  updateComment,
-  searchByFeatureName,
-} = require("../controllers/featureController");
-const {
-  featureSchemaValidate,
-} = require("../middlewares/validators/featureSchemaValidate");
-const { verifyAuthToken } = require("../middlewares/verifyAuthToken");
-const router = express.Router();
+const express = require("express"),
+  router = express.Router(),
+  {
+    addNewFeature,
+    getAllFeatures,
+    changeStatus,
+    updateVotes,
+    updateComment,
+    searchByFeatureName,
+  } = require("../controllers/featureController"),
+  {
+    featureSchemaValidate,
+  } = require("../middlewares/validators/featureSchemaValidate"),
+  { verifyAuthToken } = require("../middlewares/verifyAuthToken");
 
 router
   .route("/add")

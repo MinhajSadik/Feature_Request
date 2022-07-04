@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+const mongoose = require("mongoose"),
+  dotenv = require("dotenv");
 
 dotenv.config({ path: "./configs/config.env" });
 const Remote_Url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pu4qt.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;

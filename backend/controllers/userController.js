@@ -1,6 +1,6 @@
-const User = require("../models/userModel");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const User = require("../models/userModel"),
+  bcrypt = require("bcrypt"),
+  jwt = require("jsonwebtoken");
 
 exports.registerUser = async (req, res) => {
   const { email, password } = req.body;
@@ -35,14 +35,8 @@ exports.registerUser = async (req, res) => {
       createdAt,
     };
 
-    res.cookie("token", token, {
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-      httpOnly: true,
-    });
-
-    return res.status(201).json({
+    return res.cookie("token", token, options).status(200).json({
       success: true,
-      message: `User with email ${email} created successfully`,
       token,
       newUser: newUserData,
     });
@@ -94,12 +88,12 @@ exports.loginUser = async (req, res) => {
       createdAt,
     };
 
-    res.cookie("token", token, {
+    const options = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
       httpOnly: true,
-    });
+    };
 
-    return res.status(200).json({
+    return res.cookie("token", token, options).status(200).json({
       success: true,
       token,
       user: newUser,
