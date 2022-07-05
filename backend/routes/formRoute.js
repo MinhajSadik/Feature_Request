@@ -1,6 +1,10 @@
 const express = require("express"),
   router = express.Router(),
-  { addNewForm } = require("../controllers/formController"),
+  {
+    addNewForm,
+    getForm,
+    updateForm,
+  } = require("../controllers/formController"),
   { verifyAuthToken } = require("../middlewares/verifyAuthToken");
 
 router.post("/addForm", verifyAuthToken, addNewForm);
