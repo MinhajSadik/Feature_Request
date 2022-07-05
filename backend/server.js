@@ -20,9 +20,11 @@ connectDB();
 
 //Routes
 const featureRoute = require("./routes/featureRoute"),
-  userRoute = require("./routes/userRoute");
+  userRoute = require("./routes/userRoute"),
+  formRoute = require("./routes/formRoute");
 app.use("/user", userRoute);
 app.use("/feature", featureRoute);
+app.use("/form", formRoute);
 
 //default route
 app.all("/", (req, res) => {
