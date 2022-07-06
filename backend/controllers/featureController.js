@@ -64,30 +64,7 @@ exports.getAllFeatures = async (req, res) => {
 };
 
 exports.updateVotes = async (req, res) => {
-  const { _id, votes } = req.body;
   try {
-    const updatedVotes = await Feature.findByIdAndUpdate(
-      {
-        _id,
-      },
-      req.body,
-      {
-        new: true,
-      }
-    );
-
-    if (!updatedVotes) {
-      return res.status(404).json({
-        success: false,
-        message: `Feature with id ${_id} does not exist`,
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: `Vote with id ${_id} updated successfully`,
-      updatedVotes,
-    });
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({
@@ -99,35 +76,7 @@ exports.updateVotes = async (req, res) => {
 };
 
 exports.updateComment = async (req, res) => {
-  const { _id, comments } = req.body;
   try {
-    const updatedComment = await Feature.findOneAndUpdate(
-      {
-        _id,
-      },
-      {
-        comments,
-      },
-      {
-        new: true,
-      }
-    )
-      .populate("comments.user", "-__v -password -email")
-      .populate("userId", "-__v -password -email")
-      .exec();
-
-    if (!updatedComment) {
-      return res.status(404).json({
-        success: false,
-        message: `Comment id ${_id} does not exist`,
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: `Comment with id ${_id} updated successfully`,
-      updatedComment,
-    });
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({
