@@ -76,12 +76,12 @@ exports.loginUser = async (req, res) => {
       createdAt,
     };
 
-    // const options = {
-    //   expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-    //   httpOnly: true,
-    // };
+    const options = {
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      httpOnly: true,
+    };
 
-    return res.status(200).json({
+    return res.cookie("token", token, options).status(200).json({
       success: true,
       token,
       newUser,
