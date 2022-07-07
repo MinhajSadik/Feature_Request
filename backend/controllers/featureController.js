@@ -70,7 +70,9 @@ exports.updateVotes = async (req, res) => {
       {
         _id,
       },
-      req.body,
+      {
+        votes,
+      },
       {
         new: true,
       }
