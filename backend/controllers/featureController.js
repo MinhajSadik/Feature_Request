@@ -64,7 +64,32 @@ exports.getAllFeatures = async (req, res) => {
 };
 
 exports.updateVotes = async (req, res) => {
+  const { _id, votes } = req.body;
   try {
+    const updatedFeature = await Feature.findOneAndUpdate(
+      {
+        _id,
+      },
+      req.body,
+      {
+        new: true,
+      }
+    )
+      .populate("userId", "-__v -password -email")
+      .populate("comments.user", "-__v -password -email")
+      .exec();
+
+    if (!updatedFeature) {
+      return res.status(404).json({
+        success: false,
+        message: `Feature with id ${_id} does not exist`,
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: `Feature votes have ${votes} updated successfully`,
+      updatedFeature,
+    });
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({
@@ -76,7 +101,39 @@ exports.updateVotes = async (req, res) => {
 };
 
 exports.updateComment = async (req, res) => {
+  const { _id, comment } = req.body;
   try {
+    const updatedFeature = await Feature.findOneAndUpdate(
+      {
+        _id,
+      },
+      {
+        $push: {
+          comments: {
+            user: req.user._id,
+            comment,
+          },
+        },
+      },
+      {
+        new: true,
+      }
+    )
+      .populate("userId", "-__v -password -email")
+      .populate("comments.user", "-__v -password -email")
+      .exec();
+
+    if (!updatedFeature) {
+      return res.status(404).json({
+        success: false,
+        message: `Feature with id ${_id} does not exist`,
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: `Feature comment have ${comment} updated successfully`,
+      updatedFeature,
+    });
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({
