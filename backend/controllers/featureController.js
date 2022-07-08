@@ -8,8 +8,6 @@ exports.addNewFeature = async (req, res) => {
       userId: req.user._id,
     });
 
-    console.log(req.user);
-
     const feature = await newFeature.save();
     if (!feature) {
       return res.status(500).json({
@@ -66,17 +64,10 @@ exports.getAllFeatures = async (req, res) => {
 exports.updateVotes = async (req, res) => {
   const { _id, votes } = req.body;
   try {
-    const updatedFeature = await Feature.findOneAndUpdate(
-      {
-        _id,
-      },
-      req.body,
-      {
-        new: true,
-      }
-    )
+    const updatedFeature = await Feature.findOneAndUpdate({ _id }, req.body, {
+      new: true,
+    })
       .populate("userId", "-__v -password -email")
-      .populate("comments.user", "-__v -password -email")
       .exec();
 
     if (!updatedFeature) {
@@ -87,11 +78,10 @@ exports.updateVotes = async (req, res) => {
     }
     return res.status(200).json({
       success: true,
-      message: `Feature votes have ${votes} updated successfully`,
+      message: `Feature votes have been updated successfully`,
       updatedFeature,
     });
   } catch (error) {
-    console.error(error.message);
     return res.status(500).json({
       name: error.name,
       success: false,
@@ -101,7 +91,7 @@ exports.updateVotes = async (req, res) => {
 };
 
 exports.updateComment = async (req, res) => {
-  const { _id, comment } = req.body;
+  const { _id, comments } = req.body;
   try {
     const updatedFeature = await Feature.findOneAndUpdate(
       {
@@ -109,10 +99,7 @@ exports.updateComment = async (req, res) => {
       },
       {
         $push: {
-          comments: {
-            user: req.user._id,
-            comment,
-          },
+          comments,
         },
       },
       {
@@ -131,7 +118,7 @@ exports.updateComment = async (req, res) => {
     }
     return res.status(200).json({
       success: true,
-      message: `Feature comment have ${comment} updated successfully`,
+      message: `Feature comment have ${comments} updated successfully`,
       updatedFeature,
     });
   } catch (error) {
