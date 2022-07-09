@@ -24,17 +24,17 @@ const Navbar = ({ loggedIn }) => {
           }
         >
           <li className="w-full">
-            <Link to="/home" className={navLink}>
+            <Link to="/" className={navLink}>
               Home
             </Link>
           </li>
           <li className="w-full">
-            <Link to="/about" className={navLink}>
+            <Link to="/" className={navLink}>
               About
             </Link>
           </li>
           <li className="w-full">
-            <Link to="/contact" className={navLink}>
+            <Link to="/" className={navLink}>
               Contact
             </Link>
           </li>
