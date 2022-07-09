@@ -3,16 +3,28 @@ import * as api from "../api";
 
 export const register = createAsyncThunk(
   "user/register",
-  async ({ userData, navigate, toast }, { rejectWithValue }) => {
+  async ({ userData, navigate }, { rejectWithValue }) => {
     try {
       const response = await api.register(userData);
-      toast.success("Successfully registered");
       navigate("/");
       return response.data;
     } catch (error) {
       console.error(error.message);
-      toast.error(error.response.data.message);
       return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const login = createAsyncThunk(
+  "user/login",
+  async ({ userData, navigate }, { rejectWithValue }) => {
+    try {
+      const response = await api.login(userData);
+      navigate("/");
+      return response.data;
+    } catch (error) {
+      console.error(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -49,7 +61,20 @@ const userSlice = createSlice({
     },
     [register.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.error;
+      state.error = action.payload.message;
+    },
+    [login.pending]: (state) => {
+      state.loading = true;
+    },
+    [login.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.user = payload;
+      state.isAuth = true;
+      localStorage.setItem("token", JSON.stringify({ ...payload }));
+    },
+    [login.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     },
   },
 });

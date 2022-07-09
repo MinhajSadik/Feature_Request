@@ -1,10 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Navbar = ({ loggedIn }) => {
+  const { user } = useSelector((state) => ({ ...state.user }));
+
   const navLink =
     "text-center md:px-4 w-full py-3 inline-block text-gray-100 hover:bg-gray-500 text-lg uppercase";
-
   const handleSubmit = (e) => {};
 
   return (
@@ -38,14 +40,14 @@ const Navbar = ({ loggedIn }) => {
               Contact
             </Link>
           </li>
-          {loggedIn && (
+          {user?.user._id && (
             <li className="w-full">
               <Link to="/dashboard" className={navLink}>
                 dashboard
               </Link>
             </li>
           )}
-          {loggedIn ? (
+          {user?.user._id ? (
             <li className="w-full">
               <button className={navLink} onClick={() => {}}>
                 logout

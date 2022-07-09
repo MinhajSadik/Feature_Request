@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { register } from "../../redux/features/userSlice";
 
@@ -25,7 +25,7 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name && email && password) {
-      dispatch(register({ userData, navigate, toast }));
+      dispatch(register({ userData, navigate }));
     }
   };
 
@@ -159,12 +159,12 @@ const Register = () => {
                   </button>
                   <p className="text-sm font-semibold mt-2 pt-1 mb-0">
                     Already have an account?
-                    <a
-                      href="/login"
+                    <Link
+                      to="/login"
                       className="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
                     >
                       Login
-                    </a>
+                    </Link>
                   </p>
                 </div>
               </form>
