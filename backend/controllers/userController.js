@@ -4,29 +4,35 @@ const User = require("../models/userModel"),
 
 exports.registerUser = async (req, res) => {
   const { name, email, password } = req.body;
-
-  const existedUser = await User.findOne({ email });
-  if (existedUser) {
-    return res.status(400).json({
-      success: false,
-      message: `User with email ${email} already exists`,
-    });
-  }
-
-  const user = new User({
-    name,
-    email,
-    password,
-  });
-
   try {
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-    const newUser = await user.save();
+    const userExisted = await User.findOne({ email });
+    if (userExisted) {
+      return res.status(400).json({
+        success: false,
+        message: `User with email ${email} already exists`,
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    const token = jwt.sign(
+      { id: newUser._id, email: newUser.email, role: newUser.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
 
     return res.status(200).json({
       success: true,
       newUser,
+      token,
     });
   } catch (error) {
     console.error(error.message);
@@ -40,8 +46,8 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const existedUser = await User.findOne({ email }).select("-__v");
-    if (!existedUser) {
+    const verifiedUser = await User.findOne({ email }).select("-__v");
+    if (!verifiedUser) {
       return res.status(400).json({
         success: false,
         message: `User with email ${email} does not exist`,
@@ -49,7 +55,7 @@ exports.loginUser = async (req, res) => {
     }
     const isPasswordValid = await bcrypt.compare(
       password,
-      existedUser.password
+      verifiedUser.password
     );
     if (!isPasswordValid) {
       return res.status(400).json({
@@ -59,32 +65,35 @@ exports.loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: existedUser._id, email: existedUser.email, role: existedUser.role },
+      {
+        id: verifiedUser._id,
+        email: verifiedUser.email,
+        role: verifiedUser.role,
+      },
       process.env.JWT_SECRET,
       {
         expiresIn: "1d",
       }
     );
 
-    const { name, role, _id, email: newEmail, createdAt } = existedUser;
-
-    const newUser = {
+    const { name, role, _id, email: newEmail, createdAt } = verifiedUser;
+    const user = {
+      _id,
       name,
       role,
-      _id,
-      email: newEmail,
       createdAt,
+      email: newEmail,
     };
 
-    const options = {
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-      httpOnly: true,
-    };
+    // const options = {
+    //   expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+    //   httpOnly: true,
+    // };
 
     return res.status(200).json({
-      success: true,
+      user,
       token,
-      newUser,
+      success: true,
     });
   } catch (error) {
     console.error(error.message);
