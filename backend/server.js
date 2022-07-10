@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser"),
   PORT = process.env.PORT || 5000,
   corsOptions = {
     credentials: true,
-    origin: ["http://localhost:3000"],
+    origin: "http://localhost:3000",
   };
 
 //configs and middlewares
