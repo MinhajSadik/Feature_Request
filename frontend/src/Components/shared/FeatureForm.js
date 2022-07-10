@@ -1,5 +1,5 @@
-import { axios } from "axios";
 import React, { useState } from "react";
+import ReactLoading from "react-loading";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -15,22 +15,23 @@ const FeatureForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user } = useSelector((state) => ({ ...state.user }));
+  const { user, loading } = useSelector((state) => ({ ...state.user }));
   const [featureData, setFeatureData] = useState(initialState);
 
   const { title, description, logo } = featureData;
 
   const uploadImage = async (e) => {
+    e.preventDefault();
     const imageData = new FormData();
     imageData.set("key", process.env.REACT_APP_IMGBB_API_KEY);
     imageData.append("image", e.target.files[0]);
-    await axios
-      .post("https://api.imgbb.com/1/upload", imageData)
-      .then((res) => {
-        setFeatureData({ ...featureData, logo: res.data.data.url });
-      })
-      .catch((err) => {
-        console.log(err);
+    fetch("https://api.imgbb.com/1/upload", {
+      method: "POST",
+      body: imageData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setFeatureData({ ...featureData, logo: data.data.url });
       });
   };
   const onInputChange = (e) => {
@@ -48,6 +49,7 @@ const FeatureForm = () => {
       const newFeatureData = {
         ...featureData,
         userId: user?.result?._id,
+        token: user?.result?.token,
       };
       dispatch(addNewFeature({ newFeatureData, navigate, toast }));
       setFeatureData(initialState);
@@ -74,7 +76,7 @@ const FeatureForm = () => {
                 Title
               </label>
               <input
-                type="title"
+                type="text"
                 name="title"
                 id="title"
                 value={title}
@@ -105,6 +107,25 @@ const FeatureForm = () => {
 
             {/* file updoad area */}
             <div className="mt-3 flex justify-center px-1 pt-1 pb-1 border-2 border-gray-300 border-dashed rounded-md">
+              {featureData.url && (
+                <div className="w-48 h-48 rounded-md shadow-lg text-center mx-auto overflow-hidden mt-4">
+                  <img
+                    className="w-full"
+                    src={featureData.display_url}
+                    alt=""
+                  />
+                </div>
+              )}
+              {loading && (
+                <div className="mt-3">
+                  <ReactLoading
+                    type="spinningBubbles"
+                    color="rgb(27, 188, 225)"
+                    height={40}
+                    width={40}
+                  />
+                </div>
+              )}
               <div className="space-y-1 text-center">
                 <svg
                   className="mx-auto h-12 w-12 text-gray-400"
@@ -121,15 +142,15 @@ const FeatureForm = () => {
                 </svg>
                 <div className="flex text-sm text-gray-600">
                   <label
-                    htmlFor="file-upload"
+                    htmlFor="file"
                     className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                   >
                     <span>Upload a file</span>
                     <input
-                      id="file-upload"
+                      id="file"
                       type="file"
-                      name="file"
-                      value={logo}
+                      name="logo"
+                      value={logo.file}
                       onChange={uploadImage}
                       className="sr-only"
                     />
