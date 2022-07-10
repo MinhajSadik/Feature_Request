@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken"),
   User = require("../models/userModel");
 
 exports.verifyAuthToken = async (req, res, next) => {
-  const token = req.headers.token["token"];
+  const token = req.headers.token["token"] || req.headers.token;
   if (!token) {
     return res.status(401).json({
       name: "TokenMissingError",
