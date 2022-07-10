@@ -32,6 +32,7 @@ const FeatureForm = () => {
       .then((res) => res.json())
       .then((data) => {
         setFeatureData({ ...featureData, logo: data.data.url });
+        console.log(featureData.logo);
       });
   };
   const onInputChange = (e) => {
@@ -49,12 +50,12 @@ const FeatureForm = () => {
       const newFeatureData = {
         ...featureData,
         userId: user?.result?._id,
-        token: user?.result?.token,
+        // token: user?.result?.token,
       };
       dispatch(addNewFeature({ newFeatureData, navigate, toast }));
       setFeatureData(initialState);
       toast.success(`${title} has been added!`);
-      navigate("/features");
+      navigate("/");
     }
   };
 
@@ -106,16 +107,12 @@ const FeatureForm = () => {
             </div>
 
             {/* file updoad area */}
+            {featureData.logo && (
+              <div className="w-20 h-20 rounded-md shadow-lg text-center mx-auto overflow-hidden mt-4">
+                <img className="w-full" src={featureData.logo} alt="" />
+              </div>
+            )}
             <div className="mt-3 flex justify-center px-1 pt-1 pb-1 border-2 border-gray-300 border-dashed rounded-md">
-              {featureData.url && (
-                <div className="w-48 h-48 rounded-md shadow-lg text-center mx-auto overflow-hidden mt-4">
-                  <img
-                    className="w-full"
-                    src={featureData.display_url}
-                    alt=""
-                  />
-                </div>
-              )}
               {loading && (
                 <div className="mt-3">
                   <ReactLoading

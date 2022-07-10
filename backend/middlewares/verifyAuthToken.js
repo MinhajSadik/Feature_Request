@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken"),
   User = require("../models/userModel");
 
 exports.verifyAuthToken = async (req, res, next) => {
-  const token = req.headers["x-access-token"] || req.headers["authorization"];
+  const token = req.headers["x-access-token"] || req.headers["Authorization"];
   if (!token) {
     return res.status(401).json({
       name: "TokenMissingError",

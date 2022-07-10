@@ -31,7 +31,7 @@ const featureSlice = createSlice({
   },
 
   extraReducers: {
-    [addNewFeature.pending]: (state, action) => {
+    [addNewFeature.pending]: (state) => {
       state.loading = true;
     },
     [addNewFeature.fulfilled]: (state, action) => {
