@@ -1,7 +1,9 @@
 import React from "react";
 
 const Home = () => {
-  return <div>Home</div>;
+  // const { user, isAuth } = useSelector((state) => ({ ...state.user }));
+  // console.log(isAuth);
+  return <div>HOME</div>;
 };
 
 export default Home;

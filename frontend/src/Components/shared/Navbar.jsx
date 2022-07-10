@@ -1,13 +1,21 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { setLogout } from "../../redux/features/userSlice";
 
-const Navbar = ({ loggedIn }) => {
+const Navbar = () => {
+  const dispatch = useDispatch();
+  // const navigate = useNavigate();
   const { user } = useSelector((state) => ({ ...state.user }));
 
   const navLink =
-    "text-center md:px-4 w-full py-3 inline-block text-gray-100 hover:bg-gray-500 text-lg uppercase";
-  const handleSubmit = (e) => {};
+    "text-center md:px-4 w-full py-3 inline-block text-gray-100 hover:bg-gray-900 text-lg uppercase";
+  const handleSearch = (e) => {};
+
+  const handleLogout = () => {
+    dispatch(setLogout());
+    localStorage.removeItem("token");
+  };
 
   return (
     <nav style={{ backgroundColor: "#3f2f3f" }}>
@@ -20,6 +28,7 @@ const Navbar = ({ loggedIn }) => {
             Feature Request
           </Link>
         </div>
+
         <ul
           className={
             "md:flex flex-col md:flex-row items-center justify-center transition"
@@ -32,24 +41,19 @@ const Navbar = ({ loggedIn }) => {
           </li>
           <li className="w-full">
             <Link to="/" className={navLink}>
-              About
-            </Link>
-          </li>
-          <li className="w-full">
-            <Link to="/" className={navLink}>
               Contact
             </Link>
           </li>
-          {user?.user._id && (
+          {user?.result._id && (
             <li className="w-full">
               <Link to="/dashboard" className={navLink}>
                 dashboard
               </Link>
             </li>
           )}
-          {user?.user._id ? (
+          {user?.result._id ? (
             <li className="w-full">
-              <button className={navLink} onClick={() => {}}>
+              <button className={navLink} onClick={() => handleLogout()}>
                 logout
               </button>
             </li>
@@ -60,7 +64,8 @@ const Navbar = ({ loggedIn }) => {
               </button>
             </li>
           )}
-          <form className="d-flex input-group w-auto" onSubmit={handleSubmit}>
+
+          <form className="d-flex input-group w-auto" onSubmit={handleSearch}>
             <input
               type="text"
               className="form-control bg-gray-300 transition-all rounded px-2 py-1 w-40 focus:outline-none text-gray-500"

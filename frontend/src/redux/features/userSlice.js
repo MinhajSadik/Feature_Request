@@ -3,13 +3,15 @@ import * as api from "../api";
 
 export const register = createAsyncThunk(
   "user/register",
-  async ({ userData, navigate }, { rejectWithValue }) => {
+  async ({ userData, navigate, toast }, { rejectWithValue }) => {
     try {
       const response = await api.register(userData);
+      toast.success("Successfully registered");
       navigate("/");
       return response.data;
     } catch (error) {
       console.error(error.message);
+      toast.error(`${error.message}`);
       return rejectWithValue(error.response.data.message);
     }
   }
@@ -17,13 +19,15 @@ export const register = createAsyncThunk(
 
 export const login = createAsyncThunk(
   "user/login",
-  async ({ userData, navigate }, { rejectWithValue }) => {
+  async ({ userData, navigate, toast }, { rejectWithValue }) => {
     try {
       const response = await api.login(userData);
+      toast.success("Successfully logged in");
       navigate("/");
       return response.data;
     } catch (error) {
       console.error(error.message);
+      toast.error(`${error.message}`);
       return rejectWithValue(error.response.data);
     }
   }
@@ -61,7 +65,7 @@ const userSlice = createSlice({
     },
     [register.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload.message;
+      state.error = action.payload;
     },
     [login.pending]: (state) => {
       state.loading = true;

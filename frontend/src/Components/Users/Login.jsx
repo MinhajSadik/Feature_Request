@@ -18,7 +18,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (email && password) {
-      dispatch(login({ userData, navigate }));
+      dispatch(login({ userData, navigate, toast }));
     }
   };
 

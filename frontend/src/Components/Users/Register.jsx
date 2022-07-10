@@ -25,7 +25,7 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name && email && password) {
-      dispatch(register({ userData, navigate }));
+      dispatch(register({ userData, navigate, toast }));
     }
   };
 
