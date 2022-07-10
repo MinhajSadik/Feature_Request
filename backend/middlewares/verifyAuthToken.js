@@ -22,7 +22,6 @@ exports.verifyAuthToken = async (req, res, next) => {
       });
     }
     req.user = user;
-    req.token = token;
     next();
   } catch (error) {
     return res.status(500).json({

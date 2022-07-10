@@ -26,8 +26,9 @@ function App() {
         <ToastContainer />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/feature/search/:searchValue" element={<Home />} />
         </Routes>
       </div>
     </BrowserRouter>

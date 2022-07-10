@@ -7,9 +7,17 @@ const Navbar = () => {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
   const { user } = useSelector((state) => ({ ...state.user }));
+  // const token = user?.token;
+
+  // if (token) {
+  //   const decodedToken = decode(token);
+  //   if (decodedToken.exp * 1000 < new Date().getTime()) {
+  //     dispatch(setLogout());
+  //   }
+  // }
 
   const navLink =
-    "text-center md:px-4 w-full py-3 inline-block text-gray-100 hover:bg-gray-900 text-lg uppercase";
+    "text-center md:px-4 w-full py-3 inline-block text-gray-100 text-lg uppercase";
   const handleSearch = (e) => {};
 
   const handleLogout = () => {

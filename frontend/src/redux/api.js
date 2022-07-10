@@ -27,3 +27,12 @@ API.interceptors.request.use((req) => {
 //authentication routes
 export const register = (userData) => API.post("/user/register", userData);
 export const login = (userData) => API.post("/user/login", userData);
+
+//feature request routes
+//add new feature
+export const addNewFeature = (newFeatureData) =>
+  API.post("/feature/add", newFeatureData);
+
+//search feature by title or description
+export const searchByFeatureName = (searchName) =>
+  API.get(`/feature/search/${searchName}`);
