@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ReactLoading from "react-loading";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -32,7 +31,6 @@ const FeatureForm = () => {
       .then((res) => res.json())
       .then((data) => {
         setFeatureData({ ...featureData, logo: data.data.url });
-        console.log(featureData.logo);
       });
   };
   const onInputChange = (e) => {
@@ -107,22 +105,8 @@ const FeatureForm = () => {
             </div>
 
             {/* file updoad area */}
-            {featureData.logo && (
-              <div className="w-20 h-20 rounded-md shadow-lg text-center mx-auto overflow-hidden mt-4">
-                <img className="w-full" src={featureData.logo} alt="" />
-              </div>
-            )}
+
             <div className="mt-3 flex justify-center px-1 pt-1 pb-1 border-2 border-gray-300 border-dashed rounded-md">
-              {loading && (
-                <div className="mt-3">
-                  <ReactLoading
-                    type="spinningBubbles"
-                    color="rgb(27, 188, 225)"
-                    height={40}
-                    width={40}
-                  />
-                </div>
-              )}
               <div className="space-y-1 text-center">
                 <svg
                   className="mx-auto h-12 w-12 text-gray-400"
@@ -138,6 +122,11 @@ const FeatureForm = () => {
                   />
                 </svg>
                 <div className="flex text-sm text-gray-600">
+                  {featureData.logo && (
+                    <div className="w-20 h-20 rounded-md shadow-lg text-center mx-auto overflow-hidden mt-4">
+                      <img className="w-full" src={featureData.logo} alt="" />
+                    </div>
+                  )}
                   <label
                     htmlFor="file"
                     className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
@@ -162,7 +151,6 @@ const FeatureForm = () => {
           </div>
           <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
             <button
-              // type="submit"
               style={{ backgroundColor: "#3f2f3f" }}
               className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 "
             >
