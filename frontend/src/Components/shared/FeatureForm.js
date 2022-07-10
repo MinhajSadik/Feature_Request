@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { addNewFeature } from "../../redux/features/featureSlice";
 
@@ -13,8 +13,8 @@ const initialState = {
 const FeatureForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id } = useParams();
-  const { user, loading } = useSelector((state) => ({ ...state.user }));
+  // const { id } = useParams();
+  const { user } = useSelector((state) => ({ ...state.user }));
   const [featureData, setFeatureData] = useState(initialState);
 
   const { title, description, logo } = featureData;
