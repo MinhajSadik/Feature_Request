@@ -5,15 +5,15 @@ const cookieParser = require("cookie-parser"),
   morgan = require("morgan"),
   connectDB = require("./configs/database"),
   app = express(),
-  PORT = process.env.PORT || 5000;
+  PORT = process.env.PORT || 5000,
+  corsOptions = {
+    credentials: true,
+    origin: ["http://localhost:3000"],
+  };
 
 //configs and middlewares
 dotenv.config({ path: "./configs/config.env" });
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-  })
-);
+app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
