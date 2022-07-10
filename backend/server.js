@@ -9,7 +9,11 @@ const cookieParser = require("cookie-parser"),
 
 //configs and middlewares
 dotenv.config({ path: "./configs/config.env" });
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
