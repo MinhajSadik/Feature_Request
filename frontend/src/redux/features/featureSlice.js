@@ -37,7 +37,7 @@ const featureSlice = createSlice({
     [addNewFeature.fulfilled]: (state, action) => {
       state.loading = false;
       state.features = [...state.features, action.payload];
-      localStorage.setItem("token", JSON.stringify({ ...action.payload }));
+      localStorage.setItem("features", JSON.stringify({ ...action.payload }));
     },
     [addNewFeature.rejected]: (state, action) => {
       state.loading = false;
