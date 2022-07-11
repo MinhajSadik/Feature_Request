@@ -17,12 +17,14 @@ console.log(REACT_APP_DEV_API, REACT_APP_PROD_API, devEnv);
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
   if (token) {
-    req.headers.Authorization = `Bearer ${
+    req.headers.Authorization = `${
       JSON.parse(localStorage.getItem("token")).token
     }`;
+    // console.log("decoded", decoded);
   }
-  console.log(token);
-  return req;
+  console.log("token", token);
+
+  return req ? req : token;
 });
 
 //authentication routes

@@ -75,8 +75,6 @@ export const loginUser = async (req, res) => {
     const { name, role, _id, email: userEmail, createdAt } = existedUser;
     const user = { name, role, _id, email: userEmail, createdAt };
 
-    res.setHeader("token", `${token}`);
-
     return res.status(200).json({
       message: `User ${name} has been logged in`,
       result: user,

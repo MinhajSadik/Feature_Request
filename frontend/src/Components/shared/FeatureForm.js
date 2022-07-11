@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import { addNewFeature } from "../../redux/features/featureSlice";
 
 const initialState = {
@@ -13,14 +14,13 @@ const initialState = {
 const FeatureForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { id } = useParams();
+  // const { id } = useParams()
   const { user } = useSelector((state) => ({ ...state.user }));
   const [featureData, setFeatureData] = useState(initialState);
 
   const { title, description, logo } = featureData;
 
   const uploadImage = async (e) => {
-    e.preventDefault();
     const imageData = new FormData();
     imageData.set("key", process.env.REACT_APP_IMGBB_API_KEY);
     imageData.append("image", e.target.files[0]);
@@ -31,6 +31,9 @@ const FeatureForm = () => {
       .then((res) => res.json())
       .then((data) => {
         setFeatureData({ ...featureData, logo: data.data.url });
+      })
+      .catch((error) => {
+        console.error(error);
       });
   };
   const onInputChange = (e) => {
@@ -43,7 +46,7 @@ const FeatureForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("clicked");
+
     if (title && description && logo) {
       const newFeatureData = {
         ...featureData,
@@ -74,7 +77,7 @@ const FeatureForm = () => {
                 Title
               </label>
               <input
-                type="text"
+                type="title"
                 name="title"
                 id="title"
                 value={title}
@@ -104,7 +107,6 @@ const FeatureForm = () => {
             </div>
 
             {/* file updoad area */}
-
             <div className="mt-3 flex justify-center px-1 pt-1 pb-1 border-2 border-gray-300 border-dashed rounded-md">
               <div className="space-y-1 text-center">
                 <svg
@@ -122,7 +124,7 @@ const FeatureForm = () => {
                 </svg>
                 <div className="flex text-sm text-gray-600">
                   {featureData.logo && (
-                    <div className="w-20 h-20 rounded-md shadow-lg text-center mx-auto overflow-hidden mt-4">
+                    <div className="w-10 h-10 rounded-md shadow-lg text-center mx-auto overflow-hidden mt-4">
                       <img className="w-full" src={featureData.logo} alt="" />
                     </div>
                   )}
@@ -134,22 +136,19 @@ const FeatureForm = () => {
                     <input
                       id="file"
                       type="file"
-                      name="logo"
+                      name="file"
                       value={logo.file}
                       onChange={uploadImage}
                       className="sr-only"
                     />
                   </label>
-                  <p className="pl-1">or drag and drop</p>
                 </div>
-                <p className="text-xs text-gray-500">
-                  PNG, JPG, GIF up to 10MB
-                </p>
               </div>
             </div>
           </div>
           <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
             <button
+              // type="submit"
               style={{ backgroundColor: "#3f2f3f" }}
               className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 "
             >
