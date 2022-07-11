@@ -13,7 +13,7 @@ const express = require("express"),
   } = require("../middlewares/validators/featureSchemaValidate"),
   { verifyAuthToken } = require("../middlewares/verifyAuthToken");
 
-router.post("/add", verifyAuthToken, featureSchemaValidate, addNewFeature);
+router.post("/add", featureSchemaValidate, addNewFeature);
 router.route("/all").get(getAllFeatures);
 router.route("/vote").put(updateVotes);
 router.route("/comment").put(verifyAuthToken, updateComment);
