@@ -15,16 +15,17 @@ const API = axios.create({
 console.log(REACT_APP_DEV_API, REACT_APP_PROD_API, devEnv);
 
 API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token");
-  if (token) {
+  if (localStorage.getItem("token")) {
     req.headers.Authorization = `${
       JSON.parse(localStorage.getItem("token")).token
     }`;
-    // console.log("decoded", decoded);
   }
-  console.log("token", token);
-
-  return req ? req : token;
+  console.log(
+    (req.headers.Authorization = `Bearer ${
+      JSON.parse(localStorage.getItem("token")).token
+    }`)
+  );
+  return req;
 });
 
 //authentication routes

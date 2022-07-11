@@ -1,5 +1,5 @@
 import FeatureModel from "../models/featureModel.js";
-// const { isAdmin } = require("../utils/helpers");
+import { isAdmin } from "../utils/helpers.js";
 
 export const addNewFeature = async (req, res) => {
   try {
