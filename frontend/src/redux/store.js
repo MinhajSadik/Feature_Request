@@ -7,37 +7,6 @@ export const store = configureStore({
     user: userReducer,
     feature: featureReducer,
   },
-
-  devTools: process.env.NODE_ENV !== "production",
-
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ["user/setUser"],
-      },
-    }),
-
-  preloadedState: {
-    user: {
-      user: null,
-      loading: false,
-      error: null,
-    },
-    feature: {
-      features: [],
-      loading: false,
-      error: null,
-    },
-  },
-
-  // enhancers: [
-  //   (getDefaultMiddleware) =>
-  //     getDefaultMiddleware({
-  //       serializableCheck: {
-  //         ignoredActions: ["user/setUser"],
-  //       },
-  //     }),
-  // ],
 });
 
 // export const { setUser } = userReducer.actions;

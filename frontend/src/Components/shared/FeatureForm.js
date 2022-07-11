@@ -43,12 +43,11 @@ const FeatureForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log("clicked");
     if (title && description && logo) {
       const newFeatureData = {
         ...featureData,
         userId: user?.result?._id,
-        // token: user?.result?.token,
       };
       dispatch(addNewFeature({ newFeatureData, navigate, toast }));
       setFeatureData(initialState);

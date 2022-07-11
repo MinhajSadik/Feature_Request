@@ -1,41 +1,32 @@
-const cookieParser = require("cookie-parser"),
-  cors = require("cors"),
-  dotenv = require("dotenv"),
-  express = require("express"),
-  morgan = require("morgan"),
-  connectDB = require("./configs/database"),
-  app = express(),
-  PORT = process.env.PORT || 5000;
-// corsOptions = {
-//   credentials: true,
-//   origin: ["http://localhost:3000"],
-// };
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import morgan from "morgan";
+import connectDB from "./configs/database.js";
 
-//configs and middlewares
 dotenv.config({ path: "./configs/config.env" });
-app.use(morgan("dev"));
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: "http://localhost:3000" }));
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-//connected to database
+//Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cookieParser());
+
 connectDB();
 
-//Routes
-const featureRoute = require("./routes/featureRoute"),
-  userRoute = require("./routes/userRoute"),
-  formRoute = require("./routes/formRoute");
+//User Routes
+import userRoute from "./routes/userRoute.js";
 app.use("/user", userRoute);
+
+//Feature Routes
+import featureRoute from "./routes/featureRoute.js";
 app.use("/feature", featureRoute);
-app.use("/form", formRoute);
 
-//default route
-app.all("/", (req, res) => {
-  console.log("Hello Feature_Request console viewer");
-  return res.send("Hello Feature_Request API viewer");
-});
-
+//Start Server
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${process.env.PORT}`);
 });

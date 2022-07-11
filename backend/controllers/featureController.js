@@ -1,9 +1,9 @@
-const Feature = require("../models/featureModel");
-const { isAdmin } = require("../utils/helpers");
+import FeatureModel from "../models/featureModel.js";
+// const { isAdmin } = require("../utils/helpers");
 
-exports.addNewFeature = async (req, res) => {
+export const addNewFeature = async (req, res) => {
   try {
-    const newFeature = new Feature({
+    const newFeature = new FeatureModel({
       ...req.body,
       userId: req.user._id,
     });
@@ -32,9 +32,9 @@ exports.addNewFeature = async (req, res) => {
   }
 };
 
-exports.getAllFeatures = async (req, res) => {
+export const getAllFeatures = async (req, res) => {
   try {
-    const features = await Feature.find({})
+    const features = await FeatureModel.find({})
       .populate("userId", "-__v -password -email")
       .populate("comments.user", "-__v -password -email")
       .sort({ createdAt: -1 })
@@ -61,12 +61,16 @@ exports.getAllFeatures = async (req, res) => {
   }
 };
 
-exports.updateVotes = async (req, res) => {
+export const updateVotes = async (req, res) => {
   const { _id, votes } = req.body;
   try {
-    const updatedFeature = await Feature.findOneAndUpdate({ _id }, req.body, {
-      new: true,
-    })
+    const updatedFeature = await FeatureModel.findOneAndUpdate(
+      { _id },
+      req.body,
+      {
+        new: true,
+      }
+    )
       .populate("userId", "-__v -password -email")
       .exec();
 
@@ -90,10 +94,10 @@ exports.updateVotes = async (req, res) => {
   }
 };
 
-exports.updateComment = async (req, res) => {
+export const updateComment = async (req, res) => {
   const { _id, comments } = req.body;
   try {
-    const updatedFeature = await Feature.findOneAndUpdate(
+    const updatedFeature = await FeatureModel.findOneAndUpdate(
       {
         _id,
       },
@@ -131,13 +135,13 @@ exports.updateComment = async (req, res) => {
   }
 };
 
-exports.searchByFeatureName = async (req, res) => {
+export const searchByFeatureName = async (req, res) => {
   const searchName = req.params.searchName
     .toLowerCase()
     .replace(/\s/g, " ")
     .trim();
   try {
-    const features = await Feature.find({
+    const features = await FeatureModel.find({
       $or: [
         { title: { $regex: searchName, $options: "i" } },
         { description: { $regex: searchName, $options: "i" } },
@@ -177,7 +181,7 @@ exports.searchByFeatureName = async (req, res) => {
   }
 };
 
-exports.changeStatus = async (req, res) => {
+export const changeStatus = async (req, res) => {
   const { _id, status } = req.body;
   if (!isAdmin(req)) {
     return res.status(403).json({
@@ -186,7 +190,7 @@ exports.changeStatus = async (req, res) => {
     });
   }
   try {
-    const updatedFeature = await Feature.findOneAndUpdate(
+    const updatedFeature = await FeatureModel.findOneAndUpdate(
       {
         _id,
       },

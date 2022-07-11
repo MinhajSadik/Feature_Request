@@ -1,23 +1,22 @@
-const express = require("express"),
-  router = express.Router(),
-  {
-    addNewFeature,
-    getAllFeatures,
-    changeStatus,
-    updateVotes,
-    updateComment,
-    searchByFeatureName,
-  } = require("../controllers/featureController"),
-  {
-    featureSchemaValidate,
-  } = require("../middlewares/validators/featureSchemaValidate"),
-  { verifyAuthToken } = require("../middlewares/verifyAuthToken");
+import express from "express";
+import {
+  addNewFeature,
+  changeStatus,
+  getAllFeatures,
+  searchByFeatureName,
+  updateComment,
+  updateVotes,
+} from "../controllers/featureController.js";
+// import { featureSchemaValidate } from "../middlewares/validators/featureSchemaValidate.js";
+// import { verifyAuthToken } from "../middlewares/verifyAuthToken.js";
+import { checkAuthToken } from "../middlewares/checkAuth.js";
+const router = express.Router();
 
-router.post("/add", verifyAuthToken, featureSchemaValidate, addNewFeature);
+router.post("/add", checkAuthToken, addNewFeature);
 router.route("/all").get(getAllFeatures);
 router.route("/vote").put(updateVotes);
-router.route("/comment").put(verifyAuthToken, updateComment);
+router.route("/comment").put(checkAuthToken, updateComment);
 router.route("/search/:searchName").get(searchByFeatureName);
-router.route("/update_status").put(verifyAuthToken, changeStatus);
+router.route("/update_status").put(checkAuthToken, changeStatus);
 
-module.exports = router;
+export default router;

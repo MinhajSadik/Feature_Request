@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-
+import mongoose from "mongoose";
 const featureSchema = new mongoose.Schema(
   {
     userId: {
@@ -56,4 +55,4 @@ const featureSchema = new mongoose.Schema(
 
 const Feature = mongoose.model("Feature", featureSchema);
 
-module.exports = Feature;
+export default Feature;

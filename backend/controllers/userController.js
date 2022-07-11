@@ -1,24 +1,22 @@
-const User = require("../models/userModel"),
-  bcrypt = require("bcrypt"),
-  jwt = require("jsonwebtoken");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import UserModel from "../models/userModel.js";
 
-exports.registerUser = async (req, res) => {
+export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
   try {
-    const userExisted = await User.findOne({ email });
-    if (userExisted) {
+    const existedUser = await UserModel.findOne({ email });
+    if (existedUser) {
       return res.status(400).json({
-        success: false,
         message: `User with email ${email} already exists`,
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    const newUser = await User.create({
+    const hashPassword = await bcrypt.hash(password, 12);
+    const newUser = await UserModel.create({
       name,
       email,
-      password: hashedPassword,
+      password: hashPassword,
     });
 
     const token = jwt.sign(
@@ -29,76 +27,65 @@ exports.registerUser = async (req, res) => {
       }
     );
 
-    return res.status(200).json({
-      success: true,
+    return res.status(201).json({
+      message: `User ${name} has been created`,
       result: newUser,
       token,
     });
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({
-      success: false,
+      name: error.name,
       message: error.message,
     });
   }
 };
 
-exports.loginUser = async (req, res) => {
+export const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const verifiedUser = await User.findOne({ email }).select("-__v");
-    if (!verifiedUser) {
+    const existedUser = await UserModel.findOne({ email }).select("-__v");
+    if (!existedUser) {
       return res.status(400).json({
-        success: false,
         message: `User with email ${email} does not exist`,
       });
     }
-    const isPasswordValid = await bcrypt.compare(
+
+    const isPasswordCorrect = await bcrypt.compare(
       password,
-      verifiedUser.password
+      existedUser.password
     );
-    if (!isPasswordValid) {
+    if (!isPasswordCorrect) {
       return res.status(400).json({
-        success: false,
-        message: "Invalid password",
+        message: `Password is incorrect`,
       });
     }
 
     const token = jwt.sign(
       {
-        id: verifiedUser._id,
-        email: verifiedUser.email,
-        role: verifiedUser.role,
+        id: existedUser._id,
+        email: existedUser.email,
+        role: existedUser.role,
       },
       process.env.JWT_SECRET,
       {
         expiresIn: "1d",
       }
     );
+    const { name, role, _id, email: userEmail, createdAt } = existedUser;
+    const user = { name, role, _id, email: userEmail, createdAt };
 
-    const { name, role, _id, email: newEmail, createdAt } = verifiedUser;
-    const user = {
-      _id,
-      name,
-      role,
-      createdAt,
-      email: newEmail,
-    };
-
-    // const options = {
-    //   expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-    //   httpOnly: true,
-    // };
+    res.setHeader("token", `${token}`);
 
     return res.status(200).json({
-      token,
+      message: `User ${name} has been logged in`,
       result: user,
-      success: true,
+      token,
     });
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({
-      success: false,
+      name: error.name,
       message: error.message,
     });
   }
