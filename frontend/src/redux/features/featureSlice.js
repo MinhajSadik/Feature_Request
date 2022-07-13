@@ -6,7 +6,6 @@ export const addNewFeature = createAsyncThunk(
   async ({ newFeatureData, navigate, toast }, { rejectWithValue }) => {
     try {
       const response = await api.addNewFeature(newFeatureData);
-      toast.success(`feature ${response.data.name} added`);
       navigate("/");
       return response.data;
     } catch (error) {

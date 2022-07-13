@@ -55,7 +55,7 @@ const FeatureForm = () => {
       };
       dispatch(addNewFeature({ newFeatureData, navigate, toast }));
       setFeatureData(initialState);
-      toast.success(`${title} has been added!`);
+      toast.success(`${title} has been published!`);
       navigate("/");
     }
   };
