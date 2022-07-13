@@ -21,6 +21,7 @@ const featureSlice = createSlice({
   name: "feature",
   initialState: {
     features: [],
+    feature: {},
     loading: false,
     error: null,
   },
@@ -34,14 +35,13 @@ const featureSlice = createSlice({
     [addNewFeature.pending]: (state) => {
       state.loading = true;
     },
-    [addNewFeature.fulfilled]: (state, action) => {
+    [addNewFeature.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.features = [...state.features, action.payload];
-      // localStorage.setItem("features", JSON.stringify({ ...action.payload }));
+      state.features = [...state.features, payload];
     },
-    [addNewFeature.rejected]: (state, action) => {
+    [addNewFeature.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = action.payload;
+      state.error = payload;
     },
   },
 });

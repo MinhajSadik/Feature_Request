@@ -20,7 +20,7 @@ export const addNewFeature = async (req, res) => {
       name: feature.title,
       success: true,
       message: `Feature: '${feature.title}' added successfully`,
-      feature,
+      result: feature,
     });
   } catch (error) {
     console.error(error.message);
@@ -49,7 +49,7 @@ export const getAllFeatures = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "All features fetched successfully",
-      features,
+      result: features,
     });
   } catch (error) {
     console.error(error.message);
@@ -64,17 +64,13 @@ export const getAllFeatures = async (req, res) => {
 export const updateVotes = async (req, res) => {
   const { _id, votes } = req.body;
   try {
-    const updatedFeature = await FeatureModel.findOneAndUpdate(
-      { _id },
-      req.body,
-      {
-        new: true,
-      }
-    )
+    const updatedVote = await FeatureModel.findOneAndUpdate({ _id }, req.body, {
+      new: true,
+    })
       .populate("userId", "-__v -password -email")
       .exec();
 
-    if (!updatedFeature) {
+    if (!updatedVote) {
       return res.status(404).json({
         success: false,
         message: `Feature with id ${_id} does not exist`,
@@ -83,7 +79,7 @@ export const updateVotes = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: `Feature votes have been updated successfully`,
-      updatedFeature,
+      result: updatedVote,
     });
   } catch (error) {
     return res.status(500).json({
@@ -97,7 +93,7 @@ export const updateVotes = async (req, res) => {
 export const updateComment = async (req, res) => {
   const { _id, comments } = req.body;
   try {
-    const updatedFeature = await FeatureModel.findOneAndUpdate(
+    const updatedComment = await FeatureModel.findOneAndUpdate(
       {
         _id,
       },
@@ -114,7 +110,7 @@ export const updateComment = async (req, res) => {
       .populate("comments.user", "-__v -password -email")
       .exec();
 
-    if (!updatedFeature) {
+    if (!updatedComment) {
       return res.status(404).json({
         success: false,
         message: `Feature with id ${_id} does not exist`,
@@ -123,7 +119,7 @@ export const updateComment = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: `Feature comment have ${comments} updated successfully`,
-      updatedFeature,
+      result: updatedComment,
     });
   } catch (error) {
     console.error(error.message);
@@ -141,7 +137,7 @@ export const searchByFeatureName = async (req, res) => {
     .replace(/\s/g, " ")
     .trim();
   try {
-    const features = await FeatureModel.find({
+    const searchesFeature = await FeatureModel.find({
       $or: [
         { title: { $regex: searchName, $options: "i" } },
         { description: { $regex: searchName, $options: "i" } },
@@ -168,8 +164,8 @@ export const searchByFeatureName = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: `${features.length} features found with name '${searchName}'`,
-      features,
+      message: `${searchesFeature.length} features found with name '${searchName}'`,
+      result: searchesFeature,
     });
   } catch (error) {
     console.error(error.message);
@@ -190,7 +186,7 @@ export const changeStatus = async (req, res) => {
     });
   }
   try {
-    const updatedFeature = await FeatureModel.findOneAndUpdate(
+    const changeFeatureStatus = await FeatureModel.findOneAndUpdate(
       {
         _id,
       },
@@ -205,7 +201,7 @@ export const changeStatus = async (req, res) => {
       .populate("comments.user", "-__v -password -email")
       .exec();
 
-    if (!updatedFeature) {
+    if (!changeFeatureStatus) {
       return res.status(404).json({
         success: false,
         message: `Feature with id ${_id} does not exist`,
@@ -214,7 +210,7 @@ export const changeStatus = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: `Feature status have ${status} updated successfully`,
-      updatedFeature,
+      result: changeFeatureStatus,
     });
   } catch (error) {
     console.error(error.message);

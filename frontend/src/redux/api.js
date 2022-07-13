@@ -16,15 +16,15 @@ console.log(REACT_APP_DEV_API, REACT_APP_PROD_API, devEnv);
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem("token")) {
-    req.headers.Authorization = `${
+    req.headers.Authorization = `Bearer ${
       JSON.parse(localStorage.getItem("token")).token
     }`;
   }
-  console.log(
-    (req.headers.Authorization = `Bearer ${
-      JSON.parse(localStorage.getItem("token")).token
-    }`)
-  );
+  // console.log(
+  //   (req.headers.Authorization = `Bearer ${
+  //     JSON.parse(localStorage.getItem("token")).token
+  //   }`)
+  // );
   return req;
 });
 
