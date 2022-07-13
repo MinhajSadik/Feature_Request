@@ -4,14 +4,7 @@ import UserModel from "../models/userModel.js";
 export const checkAuthToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
-    const isCustomAuth = token.length < 500;
-    console.log(isCustomAuth);
-
-    if (!token) {
-      return res.status(401).json({
-        message: "token is required",
-      });
-    }
+    const isCustomAuth = Object.keys(token).length > 0;
 
     if (token && isCustomAuth) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
