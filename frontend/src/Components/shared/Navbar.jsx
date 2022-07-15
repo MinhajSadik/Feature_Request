@@ -1,12 +1,12 @@
 import decode from "jwt-decode";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setLogout } from "../../redux/features/userSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => ({ ...state.user }));
   const token = user?.token;
 
@@ -14,6 +14,7 @@ const Navbar = () => {
     const decodedToken = decode(token);
     if (decodedToken.exp * 1000 < new Date().getTime()) {
       dispatch(setLogout());
+      navigate("/login");
     }
   }
 
