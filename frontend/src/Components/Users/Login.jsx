@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login } from "../../redux/features/userSlice";
+
 const initialState = {
   email: "",
   password: "",
@@ -29,7 +30,7 @@ const Login = () => {
 
   useEffect(() => {
     if (error || loading) {
-      error && toast.error(error);
+      error && toast.error(error.message);
     }
   }, [error, loading]);
 

@@ -11,7 +11,6 @@ export const register = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error(error.message);
-      toast.error(`${error.message}`);
       return rejectWithValue(error.response.data.message);
     }
   }
@@ -27,7 +26,6 @@ export const login = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error(error.message);
-      toast.error(`${error.message}`);
       return rejectWithValue(error.response.data);
     }
   }

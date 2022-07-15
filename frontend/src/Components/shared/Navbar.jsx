@@ -24,6 +24,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(setLogout());
+    navigate("/login");
     localStorage.removeItem("token");
   };
 
@@ -64,7 +65,7 @@ const Navbar = () => {
           {user?.result._id ? (
             <li className="w-full">
               <button className={navLink} onClick={() => handleLogout()}>
-                logout
+                Logout
               </button>
             </li>
           ) : (
