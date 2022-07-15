@@ -20,7 +20,7 @@ export const addNewFeature = async (req, res) => {
       name: feature.title,
       success: true,
       message: `Feature: '${feature.title}' added successfully`,
-      result: feature,
+      feature,
     });
   } catch (error) {
     console.error(error.message);
@@ -49,7 +49,7 @@ export const getAllFeatures = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "All features fetched successfully",
-      result: features,
+      features,
     });
   } catch (error) {
     console.error(error.message);

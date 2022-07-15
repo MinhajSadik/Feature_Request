@@ -16,13 +16,39 @@ export const addNewFeature = createAsyncThunk(
   }
 );
 
+export const getAllFeatures = createAsyncThunk(
+  "feature/getAllFeatures",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.getAllFeatures();
+      return response.data;
+    } catch (error) {
+      console.error(error.message);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const searchByFeatureName = createAsyncThunk(
+  "feature/searchByFeatureName",
+  async (searchName, { rejectWithValue }) => {
+    try {
+      const response = await api.searchByFeatureName(searchName);
+      return response.data;
+    } catch (error) {
+      console.error(error.message);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const featureSlice = createSlice({
   name: "feature",
   initialState: {
-    features: [],
-    feature: {},
-    loading: false,
     error: null,
+    feature: {},
+    features: [],
+    loading: false,
   },
   reducers: {
     setFeatures: (state, action) => {
@@ -36,11 +62,33 @@ const featureSlice = createSlice({
     },
     [addNewFeature.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.features = [...state.features, payload];
+      state.feature = payload;
     },
     [addNewFeature.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = payload;
+      state.error = payload.message;
+    },
+    [getAllFeatures.pending]: (state) => {
+      state.loading = true;
+    },
+    [getAllFeatures.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.features = payload;
+    },
+    [getAllFeatures.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload.message;
+    },
+    [searchByFeatureName.pending]: (state) => {
+      state.loading = true;
+    },
+    [searchByFeatureName.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.features = payload;
+    },
+    [searchByFeatureName.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload.message;
     },
   },
 });

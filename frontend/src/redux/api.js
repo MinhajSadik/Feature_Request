@@ -38,5 +38,8 @@ export const addNewFeature = (newFeatureData) =>
   API.post("/feature/add", newFeatureData);
 
 //search feature by title or description
-// export const searchByFeatureName = (searchName) =>
-//   API.get(`/feature/search/${searchName}`);
+export const searchByFeatureName = (searchName) =>
+  API.get(`/feature/search/${searchName}`);
+
+//get all features
+export const getAllFeatures = () => API.get("/feature/all");

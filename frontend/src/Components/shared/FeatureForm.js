@@ -61,7 +61,7 @@ const FeatureForm = () => {
   };
 
   return (
-    <div className="md:grid md:grid-cols-3 md:gap-6 ml-8 mt-8">
+    <div className="ml-8 mt-8">
       <div className="bg-gray-200 max-w-sm p-3 rounded-lg">
         <h2 className="text-xl text-center">Feature Request</h2>
         <p className="text-center my-4">
