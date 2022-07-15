@@ -3,7 +3,7 @@ import { loginUser, registerUser } from "../controllers/userController.js";
 import {
   loginValidate,
   registerValidate,
-} from "../middlewares/validators/userSchemaValidate";
+} from "../middlewares/validators/userSchemaValidate.js";
 const router = express.Router();
 
 router.post("/register", registerValidate, registerUser);

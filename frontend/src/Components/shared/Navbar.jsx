@@ -1,3 +1,4 @@
+import decode from "jwt-decode";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -7,14 +8,14 @@ const Navbar = () => {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
   const { user } = useSelector((state) => ({ ...state.user }));
-  // const token = user?.token;
+  const token = user?.token;
 
-  // if (token) {
-  //   const decodedToken = decode(token);
-  //   if (decodedToken.exp * 1000 < new Date().getTime()) {
-  //     dispatch(setLogout());
-  //   }
-  // }
+  if (token) {
+    const decodedToken = decode(token);
+    if (decodedToken.exp * 1000 < new Date().getTime()) {
+      dispatch(setLogout());
+    }
+  }
 
   const navLink =
     "text-center md:px-4 w-full py-3 inline-block text-gray-100 text-lg uppercase";
