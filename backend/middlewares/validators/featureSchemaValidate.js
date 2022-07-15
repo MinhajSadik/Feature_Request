@@ -1,5 +1,4 @@
 import Joi from "joi";
-Joi.objectId = require("joi-objectid")(Joi);
 
 export const featureSchemaValidate = (req, res, next) => {
   const schema = {

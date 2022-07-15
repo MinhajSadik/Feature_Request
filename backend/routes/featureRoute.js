@@ -7,12 +7,11 @@ import {
   updateComment,
   updateVotes,
 } from "../controllers/featureController.js";
-// import { featureSchemaValidate } from "../middlewares/validators/featureSchemaValidate.js";
-// import { verifyAuthToken } from "../middlewares/verifyAuthToken.js";
 import { checkAuthToken } from "../middlewares/checkAuth.js";
+import { featureSchemaValidate } from "../middlewares/validators/featureSchemaValidate.js";
 const router = express.Router();
 
-router.post("/add", checkAuthToken, addNewFeature);
+router.post("/add", featureSchemaValidate, checkAuthToken, addNewFeature);
 router.route("/all").get(getAllFeatures);
 router.route("/vote").put(updateVotes);
 router.route("/comment").put(checkAuthToken, updateComment);
