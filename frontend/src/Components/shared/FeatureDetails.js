@@ -40,7 +40,7 @@ const FeatureDetails = ({ feature }) => {
               alt="Avatar of Writer"
             />
             <div className="text-sm">
-              <p className="text-gray-900 leading-none">John Smith</p>
+              <p className="text-gray-900 leading-none"></p>
               <p className="text-gray-600">Aug 18</p>
             </div>
           </div>
