@@ -46,9 +46,8 @@ export const getAllFeatures = async (req, res) => {
         message: "There are no features yet",
       });
     }
-    return res.status(200).json({
+    return res.status(200).send({
       success: true,
-      message: "All features fetched successfully",
       features,
     });
   } catch (error) {
