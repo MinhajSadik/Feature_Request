@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 const FeatureDetails = ({ feature }) => {
-  const { user, isAuth, loading, error } = useSelector((state) => ({
+  const { isAuth, error } = useSelector((state) => ({
     ...state.user,
     ...state.feature,
   }));
