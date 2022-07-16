@@ -61,7 +61,7 @@ const FeatureForm = () => {
   };
 
   return (
-    <div className="ml-8 mt-8">
+    <div className="md:ml-8 mt-8 sticky top-20 z-0">
       <div className="bg-gray-200 max-w-sm p-3 rounded-lg">
         <h2 className="text-xl text-center">Feature Request</h2>
         <p className="text-center my-4">
@@ -70,7 +70,7 @@ const FeatureForm = () => {
         <form className="" onSubmit={handleSubmit}>
           <div className="px-4 py-2 bg-white">
             {/* title */}
-            <div className="flex mt-3 flex-col p-2 pb-3 rounded-md bg-gray-100">
+            <div className="flex mt-3 flex-col p-2 pb-3 rounded-md bg-gray-100 items-start">
               <label
                 htmlFor="title"
                 className="uppercase text-gray-500 text-sm"
@@ -83,13 +83,13 @@ const FeatureForm = () => {
                 id="title"
                 value={title}
                 onChange={onInputChange}
-                className="text-gray-500 bg-transparent focus:outline-none placeholder-gray-400  "
+                className="text-gray-500 bg-transparent focus:outline-none placeholder-gray-400 w-full"
                 placeholder="Enter a Short, descriptive title"
               />
             </div>
 
             {/* description */}
-            <div className="flex mt-3 flex-col p-2 pb-3 rounded-md bg-gray-100">
+            <div className="flex mt-3 flex-col p-2 pb-3 rounded-md bg-gray-100 items-start">
               <label
                 htmlFor="details"
                 className="uppercase text-gray-500 text-sm"
@@ -102,7 +102,7 @@ const FeatureForm = () => {
                 id="description"
                 value={description}
                 onChange={onInputChange}
-                className="text-gray-500 bg-transparent   focus:outline-none  placeholder-gray-400"
+                className="text-gray-500 bg-transparent focus:outline-none  placeholder-gray-400 w-full"
                 placeholder="Any additional details"
               ></textarea>
             </div>

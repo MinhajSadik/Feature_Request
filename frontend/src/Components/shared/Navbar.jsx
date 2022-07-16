@@ -29,7 +29,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav style={{ backgroundColor: "#3f2f3f" }}>
+    <nav style={{ backgroundColor: "#3f2f3f" }} className="sticky top-0 z-50">
       <div className="container mx-auto px-4 flex flex-col md:flex-row  justify-start md:justify-between md:items-center">
         <div className="flex justify-between w-full">
           <Link
