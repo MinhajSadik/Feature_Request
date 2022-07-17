@@ -1,13 +1,44 @@
 import moment from "moment";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { commentOnFeature } from "../../redux/features/featureSlice";
 
 const FeatureDetails = ({ feature }) => {
-  const { isAuth, error } = useSelector((state) => ({
+  const [comment, setComment] = useState("");
+  const dispatch = useDispatch();
+  const [showComment, setShowComment] = useState(false);
+  const { user, isAuth, error } = useSelector((state) => ({
     ...state.user,
     ...state.feature,
   }));
+
+  const typeComment = (e) => {
+    setComment(e.target.value);
+  };
+
+  const handleComment = (e) => {
+    e.preventDefault();
+    const commentData = {
+      _id: feature._id[0],
+      comments: [
+        {
+          user: user?.result?._id,
+          comment,
+        },
+      ],
+    };
+
+    dispatch(commentOnFeature(commentData));
+  };
+
+  const handleCommentToggle = () => {
+    if (isAuth) {
+      setShowComment(!showComment);
+    } else {
+      toast.error("You must be logged in to comment");
+    }
+  };
 
   useEffect(() => {
     error && toast.error(error);
@@ -53,7 +84,7 @@ const FeatureDetails = ({ feature }) => {
                   )}
                 </span>
               </div>
-              <div className="flex justify-end">
+              <div className="flex items-center">
                 <img
                   className="w-10 h-10 rounded-full mr-4"
                   src={
@@ -72,8 +103,73 @@ const FeatureDetails = ({ feature }) => {
                   </p>
                 </div>
               </div>
+              <div className="flex justify-end">
+                <div className="mr-2 relative">
+                  <button className="" onClick={() => {}}>
+                    🔼
+                  </button>
+                  <span className="md:text-gray-500 absolute md:static -top-1 left-3 bg-indigo-500 md:bg-transparent text-white  rounded-full px-1 md:px-0 text-xs md:text-base ">
+                    {/* {vote.length} */}
+                  </span>
+                </div>
+                <button onClick={handleCommentToggle} className="relative">
+                  <span>💬</span>
+                  <span className="absolute -top-1 left-3 bg-gray-500 text-white rounded-full px-1 text-xs">
+                    {feature?.comments.length}
+                  </span>
+                </button>
+              </div>
+              <div className="bg-gray-300 rounded-md text-gray-600 p-2 pt-1 my-2">
+                <div className="">
+                  <div className="uppercase bg-purple-500 rounded-full inline-block px-3 py-1 text-2xl font-bold text-white ">
+                    {feature?.comments?.userId?.name}
+                  </div>
+                  <p></p>
+                </div>
+                <p className="bg-gray-200 rounded px-2 py-1 md:ml-12">
+                  {feature?.comments?.message}
+                </p>
+                <small>
+                  {moment(feature?.comments?.createdAt).startOf().fromNow()}
+                </small>
+              </div>
             </div>
           </div>
+          {showComment ? (
+            <div>
+              {/* {comments.map((comment, index) => (
+                    <CommentsDetails key={index} comment={comment} />
+                  ))} */}
+              <form action="" onSubmit={handleComment}>
+                <div className="flex mt-3 flex-col p-2 pb-3 rounded-md bg-gray-100">
+                  <label
+                    htmlFor="comment"
+                    className="uppercase text-gray-500 text-sm"
+                  >
+                    comment
+                  </label>
+                  <textarea
+                    name="comment"
+                    value={comment}
+                    onChange={typeComment}
+                    rows="3"
+                    id="comment"
+                    className="text-gray-500 bg-transparent   focus:outline-none  placeholder-gray-400"
+                    placeholder="Wright a comment.."
+                  ></textarea>
+                </div>
+                <div className="flex justify-center mt-3 items-center">
+                  <input
+                    type="submit"
+                    className="px-3 bg-indigo-600 font-bold text-white hover:bg-indigo-700 py-2 rounded cursor-pointer uppercase text-sm"
+                    value="comment"
+                  />
+                </div>
+              </form>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       )}
     </>

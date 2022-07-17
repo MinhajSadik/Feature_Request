@@ -43,3 +43,7 @@ export const searchByFeatureName = (searchName) =>
 
 //get all features
 export const getAllFeatures = () => API.get("/feature/all");
+
+//comment on feature
+export const commentOnFeature = (commentData) =>
+  API.put("/feature/comment", commentData);

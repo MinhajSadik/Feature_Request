@@ -42,6 +42,20 @@ export const searchByFeatureName = createAsyncThunk(
   }
 );
 
+export const commentOnFeature = createAsyncThunk(
+  "feature/commentOnFeature",
+  async ({ commentData, toast }, { rejectWithValue }) => {
+    try {
+      const response = await api.commentOnFeature(commentData);
+      return response.data;
+    } catch (error) {
+      console.error(error.message);
+      toast.error(`${error.message}`);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const featureSlice = createSlice({
   name: "feature",
   initialState: {
@@ -89,6 +103,17 @@ const featureSlice = createSlice({
     [searchByFeatureName.rejected]: (state, { payload }) => {
       state.loading = false;
       state.error = payload.message;
+    },
+    [commentOnFeature.pending]: (state) => {
+      state.loading = true;
+    },
+    [commentOnFeature.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.feature = payload;
+    },
+    [commentOnFeature.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
     },
   },
 });

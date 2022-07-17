@@ -83,6 +83,7 @@ const FeatureForm = () => {
                 id="title"
                 value={title}
                 onChange={onInputChange}
+                title="Enter a short title or descriptive"
                 className="text-gray-500 bg-transparent focus:outline-none placeholder-gray-400 w-full"
                 placeholder="Enter a Short, descriptive title"
               />
@@ -102,6 +103,7 @@ const FeatureForm = () => {
                 id="description"
                 value={description}
                 onChange={onInputChange}
+                title="Detailed description of the feature"
                 className="text-gray-500 bg-transparent focus:outline-none  placeholder-gray-400 w-full"
                 placeholder="Any additional details"
               ></textarea>
