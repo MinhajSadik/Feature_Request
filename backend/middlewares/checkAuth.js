@@ -3,7 +3,7 @@ import UserModel from "../models/userModel.js";
 
 export const checkAuthToken = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
+    const token = req.headers.authorization.split(" ")[1];
     const isCustomAuth = token.length < 500;
 
     if (token && isCustomAuth) {
