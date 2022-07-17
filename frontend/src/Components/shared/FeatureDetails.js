@@ -19,8 +19,9 @@ const FeatureDetails = ({ feature }) => {
 
   const handleComment = (e) => {
     e.preventDefault();
+    const _id = feature.comments._id;
     const commentData = {
-      _id: "62d2cc290aa59b418ba76b34",
+      _id,
       comments: [
         {
           user: user?.result?._id,
@@ -121,27 +122,28 @@ const FeatureDetails = ({ feature }) => {
               </div>
             </div>
           </div>
-          {showComment && (
-            <div className="bg-gray-300 rounded-md text-gray-600 p-2 pt-1 my-2">
-              <div className="">
-                <div className="uppercase bg-purple-500 rounded-full inline-block px-3 py-1 text-2xl font-bold text-white ">
-                  {feature?.comments?.userId?.name}
+          {showComment &&
+            feature.comments.map((c) => (
+              <div key={c._id} className=" rounded-md text-gray-600 pt-1 my-2">
+                <div class="space-x-2">
+                  <div class="block">
+                    <div class="bg-gray-300 w-auto rounded-xl px-2 pb-2">
+                      <div class="font-medium">
+                        <small>{c?.user?.name}</small>
+                      </div>
+                      <div class="text-xs">{c.message}</div>
+                    </div>
+                    <div class="flex justify-start items-center text-xs w-full">
+                      <div class="font-semibold text-gray-700 px-2 flex items-center justify-center space-x-1">
+                        <small>{moment(c.createdAt).startOf().fromNow()}</small>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p></p>
               </div>
-              <p className="bg-gray-200 rounded px-2 py-1 md:ml-12">
-                {feature?.comments?.message}
-              </p>
-              <small>
-                {moment(feature?.comments?.createdAt).startOf().fromNow()}
-              </small>
-            </div>
-          )}
+            ))}
           {showComment ? (
             <div>
-              {/* {comments.map((comment, index) => (
-                    <CommentsDetails key={index} comment={comment} />
-                  ))} */}
               <form action="" onSubmit={handleComment}>
                 <div className="flex mt-3 flex-col p-2 pb-3 rounded-md bg-gray-100">
                   <label
@@ -157,7 +159,7 @@ const FeatureDetails = ({ feature }) => {
                     rows="3"
                     id="comment"
                     className="text-gray-500 bg-transparent   focus:outline-none  placeholder-gray-400"
-                    placeholder="Wright a comment.."
+                    placeholder="Write a comment.."
                   ></textarea>
                 </div>
                 <div className="flex justify-center mt-3 items-center">
