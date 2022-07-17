@@ -14,7 +14,7 @@ const router = express.Router();
 router.post("/add", checkAuthToken, featureSchemaValidate, addNewFeature);
 router.route("/all").get(getAllFeatures);
 router.route("/vote").put(updateVotes);
-router.route("/comment").put(checkAuthToken, updateComment);
+router.route("/comment").put(updateComment);
 router.route("/search/:searchName").get(searchByFeatureName);
 router.route("/update_status").put(checkAuthToken, changeStatus);
 

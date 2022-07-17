@@ -20,7 +20,7 @@ const FeatureDetails = ({ feature }) => {
   const handleComment = (e) => {
     e.preventDefault();
     const commentData = {
-      _id: feature._id[0],
+      _id: "62d2cc290aa59b418ba76b34",
       comments: [
         {
           user: user?.result?._id,
@@ -32,7 +32,7 @@ const FeatureDetails = ({ feature }) => {
     dispatch(commentOnFeature(commentData));
   };
 
-  const handleCommentToggle = () => {
+  const handleCommentToggle = (e) => {
     if (isAuth) {
       setShowComment(!showComment);
     } else {
@@ -119,22 +119,24 @@ const FeatureDetails = ({ feature }) => {
                   </span>
                 </button>
               </div>
-              <div className="bg-gray-300 rounded-md text-gray-600 p-2 pt-1 my-2">
-                <div className="">
-                  <div className="uppercase bg-purple-500 rounded-full inline-block px-3 py-1 text-2xl font-bold text-white ">
-                    {feature?.comments?.userId?.name}
-                  </div>
-                  <p></p>
-                </div>
-                <p className="bg-gray-200 rounded px-2 py-1 md:ml-12">
-                  {feature?.comments?.message}
-                </p>
-                <small>
-                  {moment(feature?.comments?.createdAt).startOf().fromNow()}
-                </small>
-              </div>
             </div>
           </div>
+          {showComment && (
+            <div className="bg-gray-300 rounded-md text-gray-600 p-2 pt-1 my-2">
+              <div className="">
+                <div className="uppercase bg-purple-500 rounded-full inline-block px-3 py-1 text-2xl font-bold text-white ">
+                  {feature?.comments?.userId?.name}
+                </div>
+                <p></p>
+              </div>
+              <p className="bg-gray-200 rounded px-2 py-1 md:ml-12">
+                {feature?.comments?.message}
+              </p>
+              <small>
+                {moment(feature?.comments?.createdAt).startOf().fromNow()}
+              </small>
+            </div>
+          )}
           {showComment ? (
             <div>
               {/* {comments.map((comment, index) => (
