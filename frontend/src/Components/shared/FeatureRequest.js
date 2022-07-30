@@ -11,7 +11,7 @@ const FeatureRequest = () => {
   // console.log(features, feature, loading, error);
   useEffect(() => {
     dispatch(getAllFeatures());
-  }, [dispatch, features]);
+  }, [dispatch]);
 
   return (
     <div className="container">

@@ -17,15 +17,14 @@ const FeatureDetails = ({ feature }) => {
     setComment(e.target.value);
   };
 
-  const handleComment = (e) => {
-    e.preventDefault();
-    const _id = feature.comments._id;
+  const handleComment = (e, id) => {
+    // e.preventDefault();
     const commentData = {
-      _id,
+      _id: id,
       comments: [
         {
           user: user?.result?._id,
-          comment,
+          message: comment,
         },
       ],
     };
@@ -109,11 +108,11 @@ const FeatureDetails = ({ feature }) => {
                   <button className="" onClick={() => {}}>
                     🔼
                   </button>
-                  <span className="md:text-gray-500 absolute md:static -top-1 left-3 bg-indigo-500 md:bg-transparent text-white  rounded-full px-1 md:px-0 text-xs md:text-base ">
-                    {/* {vote.length} */}
+                  <span className="absolute -top-1 left-3 bg-gray-500 text-white rounded-full px-1 text-xs ">
+                    {feature?.votes?.length}
                   </span>
                 </div>
-                <button onClick={handleCommentToggle} className="relative">
+                <button onClick={handleCommentToggle} className="relative mx-2">
                   <span>💬</span>
                   <span className="absolute -top-1 left-3 bg-gray-500 text-white rounded-full px-1 text-xs">
                     {feature?.comments.length}
@@ -125,16 +124,16 @@ const FeatureDetails = ({ feature }) => {
           {showComment &&
             feature.comments.map((c) => (
               <div key={c._id} className=" rounded-md text-gray-600 pt-1 my-2">
-                <div class="space-x-2">
-                  <div class="block">
-                    <div class="bg-gray-300 w-auto rounded-xl px-2 pb-2">
-                      <div class="font-medium">
+                <div className="space-x-2">
+                  <div className="block">
+                    <div className="bg-gray-300 w-auto rounded-xl px-2 pb-2">
+                      <div className="font-medium">
                         <small>{c?.user?.name}</small>
                       </div>
-                      <div class="text-xs">{c.message}</div>
+                      <div className="text-xs">{c.message}</div>
                     </div>
-                    <div class="flex justify-start items-center text-xs w-full">
-                      <div class="font-semibold text-gray-700 px-2 flex items-center justify-center space-x-1">
+                    <div className="flex justify-start items-center text-xs w-full">
+                      <div className="font-semibold text-gray-700 px-2 flex items-center justify-center space-x-1">
                         <small>{moment(c.createdAt).startOf().fromNow()}</small>
                       </div>
                     </div>
@@ -142,9 +141,9 @@ const FeatureDetails = ({ feature }) => {
                 </div>
               </div>
             ))}
-          {showComment ? (
+          {showComment && (
             <div>
-              <form action="" onSubmit={handleComment}>
+              <form action="">
                 <div className="flex mt-3 flex-col p-2 pb-3 rounded-md bg-gray-100">
                   <label
                     htmlFor="comment"
@@ -163,16 +162,21 @@ const FeatureDetails = ({ feature }) => {
                   ></textarea>
                 </div>
                 <div className="flex justify-center mt-3 items-center">
-                  <input
+                  {/* <input
                     type="submit"
                     className="px-3 bg-indigo-600 font-bold text-white hover:bg-indigo-700 py-2 rounded cursor-pointer uppercase text-sm"
                     value="comment"
-                  />
+                  /> */}
+                  <button
+                    type="button"
+                    onClick={() => handleComment(feature._id)}
+                    className="px-3 bg-indigo-600 font-bold text-white hover:bg-indigo-700 py-2 rounded cursor-pointer uppercase text-sm"
+                  >
+                    comment
+                  </button>
                 </div>
               </form>
             </div>
-          ) : (
-            <></>
           )}
         </div>
       )}

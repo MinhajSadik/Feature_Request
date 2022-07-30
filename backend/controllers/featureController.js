@@ -86,27 +86,19 @@ export const updateVotes = async (req, res) => {
   }
 };
 
-export const updateComment = async (req, res) => {
-  const { _id, comments } = req.body;
+//post a comment on a feature
+export const addComment = async (req, res) => {
+  const { _id, comment } = req.body;
   try {
-    const updatedComment = await FeatureModel.findOneAndUpdate(
-      {
-        _id,
-      },
-      {
-        $push: {
-          comments,
-        },
-      },
-      {
-        new: true,
-      }
+    const updatedFeature = await FeatureModel.findOneAndUpdate(
+      { _id },
+      { $push: { comments: comment } },
+      { new: true }
     )
       .populate("userId", "-__v -password -email")
-      .populate("comments.user", "-__v -password -email")
       .exec();
 
-    if (!updatedComment) {
+    if (!updatedFeature) {
       return res.status(404).json({
         success: false,
         message: `Feature with id ${_id} does not exist`,
@@ -114,11 +106,10 @@ export const updateComment = async (req, res) => {
     }
     return res.status(200).json({
       success: true,
-      message: `Feature comment have ${comments} updated successfully`,
-      result: updatedComment,
+      message: `Comment added successfully`,
+      result: updatedFeature,
     });
   } catch (error) {
-    console.error(error.message);
     return res.status(500).json({
       name: error.name,
       success: false,
