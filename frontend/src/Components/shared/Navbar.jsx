@@ -33,7 +33,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 flex flex-col md:flex-row  justify-start md:justify-between md:items-center">
         <div className="flex justify-between w-full">
           <Link
-            to="/"
+            to={`/`}
             className="py-1 inline-block text-gray-100 text-lg uppercase"
           >
             Feature Request

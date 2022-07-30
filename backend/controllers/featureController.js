@@ -60,24 +60,27 @@ export const getAllFeatures = async (req, res) => {
 export const updateVotes = async (req, res) => {
   const { _id, votes } = req.body;
   try {
-    const updatedVote = await FeatureModel.findOneAndUpdate({ _id }, req.body, {
-      new: true,
-    })
+    const updateVote = await FeatureModel.findByIdAndUpdate(
+      _id,
+      {
+        votes,
+      },
+      {
+        new: true,
+      }
+    )
       .populate("userId", "-__v -password -email")
       .exec();
-
-    if (!updatedVote) {
+    if (!updateVote) {
       return res.status(404).json({
         success: false,
-        message: `Feature with id ${_id} does not exist`,
+        message: `Feature with id: ${_id} not found`,
       });
     }
-    return res.status(200).json({
-      success: true,
-      message: `Feature votes have been updated successfully`,
-      result: updatedVote,
-    });
+
+    return res.status(200).json(updateVote);
   } catch (error) {
+    console.error(error.message);
     return res.status(500).json({
       name: error.name,
       success: false,
@@ -86,29 +89,27 @@ export const updateVotes = async (req, res) => {
   }
 };
 
-//post a comment on a feature
-export const addComment = async (req, res) => {
-  const { _id, comment } = req.body;
+export const updateComment = async (req, res) => {
+  const { _id, comments } = req.body;
   try {
-    const updatedFeature = await FeatureModel.findOneAndUpdate(
-      { _id },
-      { $push: { comments: comment } },
+    const updatedComment = await FeatureModel.findOneAndUpdate(
+      _id,
+      {
+        $push: { comments },
+      },
       { new: true }
     )
       .populate("userId", "-__v -password -email")
+      .populate("comments.user", "-__v -password -email")
       .exec();
 
-    if (!updatedFeature) {
+    if (!updatedComment) {
       return res.status(404).json({
         success: false,
         message: `Feature with id ${_id} does not exist`,
       });
     }
-    return res.status(200).json({
-      success: true,
-      message: `Comment added successfully`,
-      result: updatedFeature,
-    });
+    return res.status(200).json(updatedComment);
   } catch (error) {
     return res.status(500).json({
       name: error.name,

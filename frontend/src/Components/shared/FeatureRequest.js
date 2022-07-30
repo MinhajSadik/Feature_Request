@@ -16,7 +16,7 @@ const FeatureRequest = () => {
   return (
     <div className="container">
       {features &&
-        features.map((feature) => (
+        features?.map((feature) => (
           <FeatureDetails key={feature._id} feature={feature} />
         ))}
     </div>

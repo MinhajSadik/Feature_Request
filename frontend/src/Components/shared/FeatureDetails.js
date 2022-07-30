@@ -2,11 +2,16 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { commentOnFeature } from "../../redux/features/featureSlice";
+import {
+  commentOnFeature,
+  voteOnFeature,
+} from "../../redux/features/featureSlice";
 
 const FeatureDetails = ({ feature }) => {
   const [comment, setComment] = useState("");
   const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const { id } = useParams();
   const [showComment, setShowComment] = useState(false);
   const { user, isAuth, error } = useSelector((state) => ({
     ...state.user,
@@ -17,10 +22,9 @@ const FeatureDetails = ({ feature }) => {
     setComment(e.target.value);
   };
 
-  const handleComment = (e, id) => {
-    // e.preventDefault();
+  const handleComment = (id) => {
     const commentData = {
-      _id: id,
+      id,
       comments: [
         {
           user: user?.result?._id,
@@ -28,8 +32,18 @@ const FeatureDetails = ({ feature }) => {
         },
       ],
     };
+    dispatch(commentOnFeature({ commentData, toast }));
+    setComment("");
+  };
 
-    dispatch(commentOnFeature(commentData));
+  const handleVote = (id) => {
+    //check same user is available in votes array
+    const voteData = {
+      _id: id,
+      votes: [user?.result?._id],
+    };
+    dispatch(voteOnFeature({ voteData, toast }));
+    console.log(voteData);
   };
 
   const handleCommentToggle = (e) => {
@@ -79,7 +93,7 @@ const FeatureDetails = ({ feature }) => {
                   {feature?.description}
                 </p>
                 <span className="text-gray-500 ">
-                  {moment(feature.createdAt).format(
+                  {moment(feature?.createdAt).format(
                     "ddd, DD MMM YYYY. hh:mm a"
                   )}
                 </span>
@@ -87,10 +101,7 @@ const FeatureDetails = ({ feature }) => {
               <div className="flex items-center">
                 <img
                   className="w-10 h-10 rounded-full mr-4"
-                  src={
-                    feature?.userId?.avatar ||
-                    "https://tailwindcss.com/img/card-top.jpg"
-                  }
+                  src={feature?.userId?.avatar || feature?.logo}
                   alt={feature?.userId?.name}
                   title={feature?.userId?.name}
                 />
@@ -99,13 +110,13 @@ const FeatureDetails = ({ feature }) => {
                     {feature?.userId?.name}
                   </p>
                   <p className="text-gray-600">
-                    {moment(feature.userId.createdAt).startOf().fromNow()}
+                    {moment(feature?.userId?.createdAt).startOf().fromNow()}
                   </p>
                 </div>
               </div>
               <div className="flex justify-end">
                 <div className="mr-2 relative">
-                  <button className="" onClick={() => {}}>
+                  <button className="" onClick={() => handleVote(feature._id)}>
                     🔼
                   </button>
                   <span className="absolute -top-1 left-3 bg-gray-500 text-white rounded-full px-1 text-xs ">
@@ -115,14 +126,14 @@ const FeatureDetails = ({ feature }) => {
                 <button onClick={handleCommentToggle} className="relative mx-2">
                   <span>💬</span>
                   <span className="absolute -top-1 left-3 bg-gray-500 text-white rounded-full px-1 text-xs">
-                    {feature?.comments.length}
+                    {feature?.comments?.length}
                   </span>
                 </button>
               </div>
             </div>
           </div>
           {showComment &&
-            feature.comments.map((c) => (
+            feature?.comments?.map((c) => (
               <div key={c._id} className=" rounded-md text-gray-600 pt-1 my-2">
                 <div className="space-x-2">
                   <div className="block">
@@ -162,11 +173,6 @@ const FeatureDetails = ({ feature }) => {
                   ></textarea>
                 </div>
                 <div className="flex justify-center mt-3 items-center">
-                  {/* <input
-                    type="submit"
-                    className="px-3 bg-indigo-600 font-bold text-white hover:bg-indigo-700 py-2 rounded cursor-pointer uppercase text-sm"
-                    value="comment"
-                  /> */}
                   <button
                     type="button"
                     onClick={() => handleComment(feature._id)}

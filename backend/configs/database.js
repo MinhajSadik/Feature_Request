@@ -7,8 +7,6 @@ const Local_Url = `mongodb://127.0.0.1:27017/${process.env.DB_NAME}`;
 const DB_URL = process.env.NODE_ENV === "production" ? Remote_Url : Local_Url;
 
 // const DB_URL = Remote_Url;
-console.log(process.env.DB_NAME);
-console.log(DB_URL);
 
 const connectDB = async () => {
   const options = {
@@ -16,8 +14,8 @@ const connectDB = async () => {
     useUnifiedTopology: true,
   };
   try {
-    await mongoose.connect(DB_URL, options);
-    console.log("Database connected successfully");
+    mongoose.connect(DB_URL, options);
+    console.log(`Database Connected with: ${DB_URL}`);
   } catch (error) {
     console.error(error.message);
   }
