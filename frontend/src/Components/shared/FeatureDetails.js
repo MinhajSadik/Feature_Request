@@ -22,28 +22,24 @@ const FeatureDetails = ({ feature }) => {
     setComment(e.target.value);
   };
 
-  const handleComment = (id) => {
+  const handleComment = (featureId) => {
     const commentData = {
-      id,
-      comments: [
-        {
-          user: user?.result?._id,
-          message: comment,
-        },
-      ],
+      user: user?.result?._id,
+      message: comment,
     };
-    dispatch(commentOnFeature({ commentData, toast }));
+    dispatch(commentOnFeature({ commentData, featureId, toast }));
     setComment("");
+    console.log(commentData, featureId);
   };
 
-  const handleVote = (id) => {
-    //check same user is available in votes array
-    const voteData = {
-      _id: id,
-      votes: [user?.result?._id],
-    };
-    dispatch(voteOnFeature({ voteData, toast }));
-    console.log(voteData);
+  const handleVote = (featureId) => {
+    //check if user is already voted
+    if (feature?.votes?.find((vote) => vote === user?.result?._id)) {
+      return toast.error("You have already voted on this feature");
+    } else {
+      const userId = user?.result?._id;
+      dispatch(voteOnFeature({ featureId, userId, toast }));
+    }
   };
 
   const handleCommentToggle = (e) => {
@@ -60,7 +56,6 @@ const FeatureDetails = ({ feature }) => {
 
   return (
     <>
-      {/* {error && <p>Error: {error}</p>} */}
       {isAuth && (
         <div className="p-8">
           <div className="w-full lg:max-w-full lg:flex">
@@ -127,6 +122,7 @@ const FeatureDetails = ({ feature }) => {
                   <span>💬</span>
                   <span className="absolute -top-1 left-3 bg-gray-500 text-white rounded-full px-1 text-xs">
                     {feature?.comments?.length}
+                    {console.log(feature?._id)}
                   </span>
                 </button>
               </div>

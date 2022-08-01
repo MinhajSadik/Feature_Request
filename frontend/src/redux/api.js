@@ -44,9 +44,10 @@ export const searchByFeatureName = (searchName) =>
 //get all features
 export const getAllFeatures = () => API.get("/feature/all");
 
-//comment on feature
-export const commentOnFeature = (commentData) =>
-  API.put("/feature/comment", commentData);
-
 //vote on feature
-export const voteOnFeature = (voteData) => API.put("/feature/vote", voteData);
+export const voteOnFeature = (featureId, userId) =>
+  API.put(`/feature/vote/${featureId}`, { userId });
+
+//comment on feature
+export const commentOnFeature = (featureId, commentData) =>
+  API.put(`/feature/comment/${featureId}`, commentData);

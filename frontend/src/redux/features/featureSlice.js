@@ -44,10 +44,10 @@ export const searchByFeatureName = createAsyncThunk(
 
 export const commentOnFeature = createAsyncThunk(
   "feature/commentOnFeature",
-  async ({ commentData, toast }, { rejectWithValue }) => {
+  async ({ featureId, commentData, toast }, { rejectWithValue }) => {
     try {
-      const response = await api.commentOnFeature(commentData);
-      toast.success(`Comment added successfully`);
+      const response = await api.commentOnFeature(featureId, commentData);
+      toast.success("Comment added successfully");
       return response.data;
     } catch (error) {
       console.error(error.message);
@@ -59,13 +59,14 @@ export const commentOnFeature = createAsyncThunk(
 
 export const voteOnFeature = createAsyncThunk(
   "feature/voteOnFeature",
-  async ({ voteData, toast }, { rejectWithValue }) => {
+  async ({ featureId, userId, toast }, { rejectWithValue }) => {
     try {
-      const response = await api.voteOnFeature(voteData);
+      const response = await api.voteOnFeature(featureId, userId);
+      toast.success("Successfully voted");
       return response.data;
     } catch (error) {
       console.error(error.message);
-      toast.error(error.response.data.message);
+      toast.error(`${error.message}`);
       return rejectWithValue(error.response.data);
     }
   }
@@ -95,7 +96,7 @@ const featureSlice = createSlice({
     },
     [addNewFeature.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = payload.message;
+      state.error = payload;
     },
     [getAllFeatures.pending]: (state) => {
       state.loading = true;
@@ -106,7 +107,7 @@ const featureSlice = createSlice({
     },
     [getAllFeatures.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = payload.message;
+      state.error = payload;
     },
     [searchByFeatureName.pending]: (state) => {
       state.loading = true;
@@ -117,7 +118,7 @@ const featureSlice = createSlice({
     },
     [searchByFeatureName.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = payload.message;
+      state.error = payload;
     },
     [commentOnFeature.pending]: (state) => {
       state.loading = true;

@@ -8,10 +8,3 @@ export const store = configureStore({
     feature: featureReducer,
   },
 });
-
-// export const { setUser } = userReducer.actions;
-// export const { setFeatures } = featureReducer.actions;
-// export const { addNewFeature } = featureReducer.actions;
-// export const { searchByFeatureName } = featureReducer.actions;
-// export const { register, login } = userReducer.actions;
-// export const { getFeatures } = featureReducer.actions;
