@@ -10,8 +10,6 @@ import {
 const FeatureDetails = ({ feature }) => {
   const [comment, setComment] = useState("");
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  // const { id } = useParams();
   const [showComment, setShowComment] = useState(false);
   const { user, isAuth, error } = useSelector((state) => ({
     ...state.user,
@@ -29,7 +27,6 @@ const FeatureDetails = ({ feature }) => {
     };
     dispatch(commentOnFeature({ commentData, featureId, toast }));
     setComment("");
-    console.log(commentData, featureId);
   };
 
   const handleVote = (featureId) => {
@@ -122,26 +119,30 @@ const FeatureDetails = ({ feature }) => {
                   <span>💬</span>
                   <span className="absolute -top-1 left-3 bg-gray-500 text-white rounded-full px-1 text-xs">
                     {feature?.comments?.length}
-                    {console.log(feature?._id)}
                   </span>
                 </button>
               </div>
             </div>
           </div>
           {showComment &&
-            feature?.comments?.map((c) => (
-              <div key={c._id} className=" rounded-md text-gray-600 pt-1 my-2">
+            feature?.comments?.map((comment) => (
+              <div
+                key={comment._id}
+                className=" rounded-md text-gray-600 pt-1 my-2"
+              >
                 <div className="space-x-2">
                   <div className="block">
                     <div className="bg-gray-300 w-auto rounded-xl px-2 pb-2">
                       <div className="font-medium">
-                        <small>{c?.user?.name}</small>
+                        <small>{comment?.user?.name}</small>
                       </div>
-                      <div className="text-xs">{c.message}</div>
+                      <div className="text-xs">{comment.message}</div>
                     </div>
                     <div className="flex justify-start items-center text-xs w-full">
                       <div className="font-semibold text-gray-700 px-2 flex items-center justify-center space-x-1">
-                        <small>{moment(c.createdAt).startOf().fromNow()}</small>
+                        <small>
+                          {moment(comment.createdAt).startOf().fromNow()}
+                        </small>
                       </div>
                     </div>
                   </div>

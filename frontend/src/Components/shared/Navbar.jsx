@@ -7,7 +7,7 @@ import { setLogout } from "../../redux/features/userSlice";
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => ({ ...state.user }));
+  const { user, isAuth } = useSelector((state) => ({ ...state.user }));
   const token = user?.token;
 
   if (token) {
@@ -55,14 +55,14 @@ const Navbar = () => {
               Contact
             </Link>
           </li>
-          {user?.result._id && (
+          {/* {user?.user?.result?._id && (
             <li className="w-full">
               <Link to="/dashboard" className={navLink}>
                 dashboard
               </Link>
             </li>
-          )}
-          {user?.result._id ? (
+          )} */}
+          {isAuth ? (
             <li className="w-full">
               <button className={navLink} onClick={() => handleLogout()}>
                 Logout

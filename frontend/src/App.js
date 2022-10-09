@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
@@ -25,10 +25,24 @@ function App() {
         <Navbar />
         <ToastContainer />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/feature/search/:searchValue" element={<Home />} />
+          <Route
+            path="/feature/search/:searchValue"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
     </BrowserRouter>
@@ -36,3 +50,8 @@ function App() {
 }
 
 export default App;
+
+const ProtectedRoute = ({ children }) => {
+  const { isAuth } = useSelector((state) => state.user);
+  return <>{isAuth ? children : <Navigate to="/login" />}</>;
+};

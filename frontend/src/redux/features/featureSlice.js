@@ -46,13 +46,13 @@ export const commentOnFeature = createAsyncThunk(
   "feature/commentOnFeature",
   async ({ featureId, commentData, toast }, { rejectWithValue }) => {
     try {
-      const response = await api.commentOnFeature(featureId, commentData);
+      const { data } = await api.commentOnFeature(featureId, commentData);
       toast.success("Comment added successfully");
-      return response.data;
+      return data;
     } catch (error) {
       console.error(error.message);
       toast.error(`${error.message}`);
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.data);
     }
   }
 );
@@ -126,6 +126,8 @@ const featureSlice = createSlice({
     [commentOnFeature.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.feature = payload;
+      console.log("state.feature:", state.feature);
+      console.log("payload:", payload);
     },
     [commentOnFeature.rejected]: (state, { payload }) => {
       state.loading = false;

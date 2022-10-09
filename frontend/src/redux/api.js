@@ -8,10 +8,6 @@ const API = axios.create({
   baseURL: `${devEnv ? REACT_APP_DEV_API : REACT_APP_PROD_API}`,
 });
 
-// const API = axios.create({
-//   baseURL: process.env.REACT_APP_PROD_API,
-// });
-
 console.log(REACT_APP_DEV_API, REACT_APP_PROD_API, devEnv);
 
 API.interceptors.request.use((req) => {
@@ -20,11 +16,6 @@ API.interceptors.request.use((req) => {
       JSON.parse(localStorage.getItem("token")).token
     }`;
   }
-  // console.log(
-  //   (req.headers.Authorization = `Bearer ${
-  //     JSON.parse(localStorage.getItem("token")).token
-  //   }`)
-  // );
   return req;
 });
 
